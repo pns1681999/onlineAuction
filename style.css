@@ -57,7 +57,6 @@
 			6.19 Single Product Tab Style Right Page
 			6.20 Single Product Gallery Left Page
 			6.21 Error 404 Page
-
 -----------------------------------------------------------------------------------*/
 
 /* Google Fonts------------------
@@ -1086,13 +1085,25 @@ textarea:focus {
 	color: #7a7a7a;
 }
 .product-details-view-content .product-info .price-box {
-  margin-bottom: 20px;
+  margin-bottom: 5px;
+
 }
+.price-box {
+	margin-bottom: 10px;
+	margin-top: 10px;
+  }
 .product-details-view-content .product-info .price-box .new-price {
   font-weight: 500;
   font-size: 24px;
   line-height: 27px;
-  color: #e80f0f;
+
+  
+}
+#fillmoney{
+	width: 200px;
+	display: inline-block;
+	float:left;
+	margin-right: 10px;
 }
 .product-details-view-content .content-center .product-variants {
   display: -webkit-box;
@@ -1180,15 +1191,8 @@ textarea:focus {
   width: 76px;
   text-align: left;
 }
-.cart-plus-minus .cart-plus-minus-box {
-	border: 1px solid #e1e1e1;
-	color: #242424;
-	height: 46px;
-	text-align: center;
-	width: 48px;
-	width: 48px;
-	width: 3rem;
-	background: #fff;
+ .money {
+	
 }
 .cart-plus-minus .dec.qtybutton, .cart-plus-minus .inc.qtybutton {
   border-bottom: 1px solid #e1e1e1;
@@ -2308,6 +2312,12 @@ textarea:focus {
 }
 .product_desc .product_desc_info .price-box .new-price-2,
 .featured-price-box .new-price-2 {
+	color: #e80f0f !important;
+}
+
+.price-box .new-price-21,
+.featured-price-box .new-price-21 {
+	padding-left:5px;
 	color: #e80f0f !important;
 }
 .product_desc .product_desc_info .price-box .discount-percentage,
