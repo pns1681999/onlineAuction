@@ -5448,10 +5448,6 @@ span.required {
   display: none;
 }
 
-#terms_conditions.html {
-	text-align: center;
-	margin: 0 auto;
-}
 .login {
 	background-image: url('./images/menu/logo/login-background.jpg');
 	background-size: cover;
