@@ -2221,13 +2221,22 @@ textarea:focus {
 .start-date {
 	font-size: 13px;
 	font-weight: 400;
+	margin: 1px;
 	display: inline-block;
+	color: #a4a4a4;
+}
+.end-date {
+	font-size: 13px;
+	font-weight: 400;
+	font-style: italic;
 	float: right;
+	margin: 1px;
+	display: inline-block;
 	color: #a4a4a4;
 }
 .rating > li {
   display: inline-block;
-  margin: 0;
+  margin: 5px;
 }
 .review-item {
 	padding-left: 20px;
@@ -3316,6 +3325,7 @@ li.right-menu .cat-mega-menu-2 > li {
 }
 .featured-pro-content .rating-box {
 	padding-top: 5px;
+	
 }
 .featured-pro-wrapper:hover .featured-price-box {
 	opacity: 0;
@@ -5019,6 +5029,7 @@ span.required {
 }
 /*----- paginatoin-area  css -----*/
 .paginatoin-area {
+  display: block !important;
   background: #ffffff none repeat scroll 0 0;
   border: 1px solid #ededed;
   border-radius: 3px;
