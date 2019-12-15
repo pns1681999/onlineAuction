@@ -145,6 +145,32 @@ Note: main.js, All Default Scripting Languages For This Theme Included In This F
 			}
 		}
 	});
+	$(".special-product-active1").owlCarousel({
+		loop: false,
+		nav: true,
+		dots: false,
+		autoplay: false,
+		autoplayTimeout: 5000,
+		navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-left"></i>'],
+		item: 4,
+		responsive: {
+			0: {
+					items: 1
+			},
+			480: {
+					items: 1
+			},
+			768: {
+					items: 2
+			},
+			992: {
+					items: 3
+			},
+			1200: {
+					items: 4
+			}
+		}
+	});
 /*----------------------------------------*/
 /* 08. Countdown
 /*----------------------------------------*/

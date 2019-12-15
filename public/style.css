@@ -2234,6 +2234,15 @@ textarea:focus {
 	display: inline-block;
 	color: #a4a4a4;
 }
+.end-date1 {
+	font-size: 13px;
+	font-weight: 400;
+	font-style: italic;
+	float: left;
+	margin: 1px;
+	display: inline-block;
+	color: #a4a4a4;
+}
 .rating > li {
   display: inline-block;
   margin: 5px;

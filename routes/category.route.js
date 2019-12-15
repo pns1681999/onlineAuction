@@ -1,4 +1,6 @@
 const express = require('express');
+const userModel = require('../models/user.model');
+const moment = require('moment');
 const productModel = require('../models/product.model');
 const config = require('../config/default.json');
 
@@ -14,28 +16,35 @@ router.get('/:id/products', async(req, res) => {
     const catId = req.params.id;
     const limit = config.paginate.limit;
 
-    const page = req.query.page || 1;
+    let page = req.query.page || 1;
     if (page < 1) page = 1;
     const offset = (page - 1) * config.paginate.limit;
 
-    const [total, rows] = await Promise.all([
+    let [total, rows] = await Promise.all([
         productModel.countByCat(catId),
         productModel.pageByCat(catId, offset)
     ]);
 
+    for (let c of rows) {
+        let nguoithang = await userModel.single(c.IdNguoiThang);
+        c.NguoiThang = nguoithang[0];
+        c.NgayDang = moment(c.NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
+        c.ThoiHan = moment(c.NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
+    }
     
     let nPages = Math.floor(total / limit);
     if (total % limit > 0) nPages++;
     if (page > nPages) page = nPages;
-    const page_numbers = [];
+    let page_numbers = [];
     for (i = 1; i <= nPages; i++) {
         page_numbers.push({
         value: i,
         isCurrentPage: i === +page
         })
     }
-
     res.render('vwProducts/allByCat', {
+        num_of_page: nPages,
+        isPage: +page,
         products: rows,
         empty: rows.length === 0,
         page_numbers,

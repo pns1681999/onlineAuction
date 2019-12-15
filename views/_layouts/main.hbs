@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -35,7 +35,7 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <!-- Helper CSS -->
     <link rel="stylesheet" href="/css/helper.css">
-    <!-- Main Style CSS -->/
+    <!-- Main Style CSS -->
     <link rel="stylesheet" href="/style.css">
     <!-- Responsive CSS -->
     <link rel="stylesheet" href="/css/responsive.css">
@@ -99,8 +99,9 @@
                         <!-- Begin Header Middle Right Area -->
                         <div class="col-lg-9 pl-0 ml-sm-15 ml-xs-15">
                             <!-- Begin Header Middle Searchbox Area -->
-                            <form action="#" class="hm-searchbox">
-                                <select class="nice-select select-search-category">
+                            <form action="/search" method="POST" class="hm-searchbox" id="formSearch" name="formSearch">
+                                <select class="nice-select select-search-category" id="idCat" name="idCat">
+                                    <option value="0">Tất cả danh mục</option>
                                     {{#each lcCategories.[0]}}
                                     <option value="{{IdDanhMuc}}">{{TenDanhMuc}}</option>
 
@@ -110,11 +111,8 @@
                                     {{/if}}
                                     {{/each}}
                                     {{/each}}
-
-
-
                                 </select>
-                                <input type="text" placeholder="Enter your search key ...">
+                                <input type="text" placeholder="Enter your search key ..." id="keyword" name="keyword">
                                 <button class="li-btn" type="submit"><i class="fa fa-search"></i></button>
                             </form>
                             <!-- Header Middle Searchbox Area End Here -->
@@ -141,11 +139,11 @@
                                         <div class="minicart">
                                             <ul class="minicart-product-list">
                                                 <li>
-                                                    <a href="single-product.html" class="minicart-product-image">
+                                                    <a href="javascript:;" class="minicart-product-image">
                                                         <img src="/images/product/small-size/3.jpg" alt="cart products">
                                                     </a>
                                                     <div class="minicart-product-details">
-                                                        <h6><a href="single-product.html">Tay cầm xbox</a></h6>
+                                                        <h6><a href="javascript:;">Tay cầm xbox</a></h6>
                                                         <span>Your bid: 60.000 x 1</span>
                                                     </div>
                                                     <button class="close">
@@ -153,11 +151,11 @@
                                                     </button>
                                                 </li>
                                                 <li>
-                                                    <a href="single-product.html" class="minicart-product-image">
+                                                    <a href="javascript:;" class="minicart-product-image">
                                                         <img src="/images/product/small-size/4.jpg" alt="cart products">
                                                     </a>
                                                     <div class="minicart-product-details">
-                                                        <h6><a href="single-product.html">Màn hình LG</a></h6>
+                                                        <h6><a href="javascript:;">Màn hình LG</a></h6>
                                                         <span>Your bid: 100.000 x 1</span>
                                                     </div>
                                                     <button class="close">
