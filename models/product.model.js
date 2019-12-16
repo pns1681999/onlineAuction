@@ -2,8 +2,8 @@ const db = require('../utils/db');
 const config = require('../config/default.json');
 
 module.exports = {
-  all: () => db.load('select * from sanpham'),
-  allInIdArray: array => db.load('select * from sanpham where IdSanPham in (' + array.join(',') + ')'),
+  all: () => db.load('select * from sanpham '),
+  allInIdArray: (array, offset) => db.load(`select * from sanpham where IdSanPham in (${array.join(',' )}) limit ${config.paginate.limit} OFFSET ${offset}`),
   allByCat: catId => db.load(`  SELECT * FROM sanpham WHERE LoaiSanPham = ${catId}
                                 UNION
                                 SELECT * FROM sanpham WHERE LoaiSanPham in (SELECT IdDanhMuc FROM danhmuc WHERE ThuocDanhMuc = ${catId})`),

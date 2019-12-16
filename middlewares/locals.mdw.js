@@ -11,6 +11,8 @@ module.exports = function (app) {
     // }
     rows[0] = rows0;
     rows[1] = rowsAll
+    
+    
     res.locals.lcCategories = rows;
     next();
   })

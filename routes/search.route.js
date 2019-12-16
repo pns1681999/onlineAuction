@@ -7,18 +7,70 @@ const lunr = require('lunr')
 
 const router = express.Router();
 
-router.post('/', async (req, res) => {
-    console.log(req.body);
-    let rows;
-    if (+req.body.idCat === 0) {
-        rows =  await productModel.all();
+let rowsSearch = [];
+let listResult = [];
+router.get('/',  async(req, res) => {
+    rowsSearch = [];
+    const limit = config.paginate.limit;
+    let page = req.query.page || 1;
+    if (page < 1) page = 1;
+    const offset = (page - 1) * config.paginate.limit;
+    let total = listResult.length;
+
+    if (listResult.length === 0){
+        rowsSearch = [];
     }
     else {
-        rows =  await productModel.allByCat(+req.body.idCat);
+        rowsSearch = await productModel.allInIdArray(listResult,offset);         
+    }
+    console.log(rowsSearch);
+    //res.render('vwSearch/search');
+
+    
+
+    
+
+    for (let c of rowsSearch) {
+        let nguoithang = await userModel.single(c.IdNguoiThang);
+        c.NguoiThang = nguoithang[0];
+        c.NgayDang = moment(c.NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
+        c.ThoiHan = moment(c.NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
+    }
+    
+    let nPages = Math.floor(total / limit);
+    if (total % limit > 0) nPages++;
+    if (page > nPages) page = nPages;
+    let page_numbers = [];
+    for (i = 1; i <= nPages; i++) {
+        page_numbers.push({
+        value: i,
+        isCurrentPage: i === +page
+        })
+    }
+    res.render('vwSearch/search', {
+        keyword: req.body.keyword,
+        num_of_page: nPages,
+        isPage: +page,
+        products: rowsSearch,
+        empty: rowsSearch.length === 0,
+        page_numbers,
+        prev_value: +page - 1,
+        next_value: +page + 1,
+    });
+})
+
+router.post('/', async (req, res) => {
+    console.log(req.body);
+    let allrows;
+    if (+req.body.idCat === 0) {
+        allrows =  await productModel.all();
+    }
+    else {
+        allrows =  await productModel.allByCat(+req.body.idCat);
     }
     let idx = lunr(function () {
         this.field('title')
-        for (c of rows) {
+        for (c of allrows) {
             this.add({
                 "id": c.IdSanPham,
                 "title": c.TenSanPham
@@ -28,19 +80,57 @@ router.post('/', async (req, res) => {
         
     let result = idx.search(req.body.keyword);
     console.log(result);
-    let listResult = [];
+    listResult = [];
     for (let c of result) {
         listResult.push(+c.ref)
     }
     console.log(listResult);
-    let rows1;
+    rowsSearch = [];
+    const limit = config.paginate.limit;
+    let page = req.query.page || 1;
+    if (page < 1) page = 1;
+    const offset = (page - 1) * config.paginate.limit;
+    let total = listResult.length;
+
     if (listResult.length === 0){
-        rows1 = [];
+        rowsSearch = [];
     }
     else {
-        rows1 = await productModel.allInIdArray(listResult);         
+        rowsSearch = await productModel.allInIdArray(listResult,offset);         
     }
-    console.log(rows1);
-    res.render('vwSearch/search');
+    console.log(rowsSearch);
+    //res.render('vwSearch/search');
+
+    
+
+    
+
+    for (let c of rowsSearch) {
+        let nguoithang = await userModel.single(c.IdNguoiThang);
+        c.NguoiThang = nguoithang[0];
+        c.NgayDang = moment(c.NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
+        c.ThoiHan = moment(c.NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
+    }
+    
+    let nPages = Math.floor(total / limit);
+    if (total % limit > 0) nPages++;
+    if (page > nPages) page = nPages;
+    let page_numbers = [];
+    for (i = 1; i <= nPages; i++) {
+        page_numbers.push({
+        value: i,
+        isCurrentPage: i === +page
+        })
+    }
+    res.render('vwSearch/search', {
+        keyword: req.body.keyword,
+        num_of_page: nPages,
+        isPage: +page,
+        products: rowsSearch,
+        empty: rowsSearch.length === 0,
+        page_numbers,
+        prev_value: +page - 1,
+        next_value: +page + 1,
+    });
 })
 module.exports = router;
