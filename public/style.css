@@ -5490,11 +5490,20 @@ span.required {
 	}
 
 	.card_registration{
-		height: 400px;
+		height: 620px;
 		margin-top: auto;
 		margin-bottom: auto;
 		width: 400px;
 		background-color: rgba(0,0,0,0.75) !important;
+	}
+	#pleaseCheck {
+		color: red;
+
+	}
+	.g-recaptcha {
+		width: 100%;
+		margin-top: 5px;
+		margin-bottom: 5px;
 	}
 	
 	.social_icon span{
