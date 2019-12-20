@@ -5,15 +5,23 @@ module.exports = function (app) {
     const rows0 = await categoryModel.allOfId(0);
     const rowsAll = await categoryModel.all();
     let rows = [];
-
-    // for (const c of rows0) {
-    //   rows[c.IdDanhMuc] = await categoryModel.allOfId(c.IdDanhMuc);
-    // }
-    rows[0] = rows0;
-    rows[1] = rowsAll
     
+    if (typeof (req.session.isAuthenticated) === 'undefined') {
+      req.session.isAuthenticated = false;
+    }
+    res.locals.isAuthenticated = req.session.isAuthenticated;
+    res.locals.authUser = req.session.authUser;
+
+
+     for (const c of rows0) {
+      rows[c.IdDanhMuc] = await categoryModel.allOfId(c.IdDanhMuc);
+     }
+    
+     rows[0] = rows0;
+     rows[1] = rowsAll
     
     res.locals.lcCategories = rows;
+ 
     next();
   })
 };

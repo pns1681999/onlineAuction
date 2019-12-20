@@ -5,6 +5,11 @@ module.exports = {
   single: id => db.load(`select * from nguoidung where IdNguoiDung = ${id}`),
   add: entity => db.add('nguoidung', entity),
   del: id => db.del('nguoidung', { IdNguoiDung: id }),
+  singleByUsername: async username=>{
+    const rows= await db.load(`select * from nguoidung where TenDangNhap= '${username}'`);
+    if(rows.length===0)return null;
+    return rows[0];
+  },
   patch: entity => {
     const condition = { IdNguoiDung: entity.IdNguoiDung };
     delete entity.IdNguoiDung;

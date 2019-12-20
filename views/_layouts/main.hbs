@@ -67,15 +67,38 @@
                         <!-- Begin Header Top Right Area -->
                         <div class="col-lg-9 col-md-8">
                             <div class="header-top-right">
+                                <form action="/account/logout" method="POST" id ="frmLogout"></form>
                                 <ul class="ht-menu">
+                                    {{#if isAuthenticated}}
+                                     <li>
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            Hi <b>{{authUser.TenDangNhap}}</b>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                            <a class="dropdown-item" href="/account/profile">
+                                                <i class="fa fa-user" aria-hidden="true"></i>
+                                                Profile
+                                            </a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item" href="javascript: $('#frmLogout').submit();">
+                                                <i class="fa fa-sign-out" aria-hidden="true" ></i>
+                                                Logout
+                                            </a>
+                                        </div>
+                                    </li>
+                                    {{else}}
                                     <li>
-                                        <div class="ht-currency-trigger"><a href="./login.html">Đăng nhập</a></div>
+                                        <div class="ht-currency-trigger"><a href="/account/login">Đăng nhập</a></div>
                                     </li>
                                     <li>
                                         <div class="ht-currency-trigger"><a href="/account/register">Đăng ký</a></div>
                                     </li>
+
+                                    {{/if}}   
                                     <!-- Language Area End Here -->
                                 </ul>
+                            </form>
                             </div>
                         </div>
                         <!-- Header Top Right Area End Here -->

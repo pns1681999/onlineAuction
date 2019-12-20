@@ -3,18 +3,20 @@ const exphbs = require('express-handlebars');
 const morgan = require('morgan');
 const numeral = require('numeral');
 const Handlebars = require('handlebars');
-const momment = require('moment')
+const momment = require('moment');
+const session=require("express-session");
 const H = require('just-handlebars-helpers');
 require('express-async-errors');
-
 const app = express();
-
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  //cookie: { secure: true }
+}))
 app.use(morgan('dev'));
 app.use(express.json());
-app.use(express.urlencoded({
-  extended: true
-}));
-
+app.use(express.urlencoded({extended: true}));
 app.use(express.static('public'));
 
 

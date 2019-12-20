@@ -32,7 +32,7 @@ router.get('/', async (req, res) => {
         c.ThoiHan = moment(c.NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
 
     }
-
+   
     res.render('home', {
         near_expiry: rows1,
         most_bids: rows2,

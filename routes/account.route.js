@@ -4,7 +4,6 @@ const moment = require('moment');
 const bcrypt = require('bcryptjs');
 const productModel = require('../models/product.model');
 const config = require('../config/default.json');
-
 const router = express.Router();
 
 router.get('/register', (req, res) =>{
@@ -18,6 +17,7 @@ router.post('/register', async (req, res) => {
     const dob = moment(req.body.txtDOB, 'DD/MM/YYYY').format('YYYY-MM-DD');
 
     let entity = {
+        
         TenDangNhap: req.body.txtUsername,
         MatKhau: hash,
         HoVaTen: req.body.txtName,
@@ -31,4 +31,62 @@ router.post('/register', async (req, res) => {
     const result = await userModel.add(entity);
     res.render('home');
 })
+
+router.get('/login',(req,res)=>{
+    res.render('vwAccount/login', {layout: false});
+
+})
+
+router.post('/login',async(req,res)=>{
+    const user= await userModel.singleByUsername(req.body.username);
+
+    if (user===null)
+    {
+        return res.render('vwAccount/login',{
+            layout:false,
+            err_message:'invalid username or passwords'
+        })
+    }
+    
+    const rs=bcrypt.compareSync(req.body.password,user.MatKhau);
+    if(rs===false){
+        return res.render('vwAccount/login',{
+            layout:false,
+            err_message:'Login failed'
+        })
+    }
+    delete user.MatKhau;
+    req.session.isAuthenticated=true;
+    req.session.authUser=user;
+    const url=req.query.retUrl||'/';
+    res.redirect(url);
+
+
+
+
+
+
+})
+router.post('/logout',(req,res)=>{
+    req.session.isAuthenticated=false;
+    req.session.authUser=null;
+     res.redirect('/');
+
+})
+
+router.get('/profile',async(req,res)=>{
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/account/profile');
+    }
+    
+    const profile=await userModel.singleByUsername(req.session.authUser.TenDangNhap);
+    delete profile.MatKhau;
+    console.log(profile);
+    profile.NgaySinh = moment(profile.NgaySinh, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
+    res.render('vwAccount/profile',{
+        infor:profile
+    });
+
+})
+
 module.exports = router;

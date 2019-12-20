@@ -1,0 +1,40 @@
+<div class="card shadow mb-4">
+    <h4 class="card-header">
+        Thông tin người dùng
+    </h4>
+    <div class="card-body">
+        
+        <form method="POST">
+        <div class="form-group">
+            <label for="IdNguoiDung">#</label>
+            <input type="text" class="form-control" id="IdNguoiDung"name="IdNguoiDung" readonly value="{{this.infor.IdNguoiDung}}" >
+        </div>
+        <div class="form-group">
+            <label for="HoVaTen">Tên người dùng</label>
+            <input type="text" class="form-control" id="HoVaTen"name="HoVaTen"   value="{{this.infor.HoVaTen}}">
+        </div>
+        
+        <div class="form-group">
+            <label for="CatID">Email</label>
+            <input type="text" class="form-control" id="Email"name="Email"   value="{{this.infor.Email}}">
+        </div>
+        <div class="form-group">
+            <label for="Email">Ngày sinh</label>
+            <input type="text" class="form-control" id="NgaySinh"name="NgaySinh"  value="{{this.infor.NgaySinh}}">
+        </div>
+    
+        <a  class="btn btn-outline-warning  "href="/" role="button">
+            <i class="fa fa-backward" aria-hidden="true"></i>
+            Return
+        </a>
+        <button type="submit" class="btn btn-primary " formaction="/account/patch"><i class="fa fa-check" aria-hidden="true"></i>Save</button>
+        <button type="submit" class="btn btn-outline-danger "formaction="/account/del"><i class="fa fa-trash-o" aria-hidden="true" hrf=""></i>Delete</button>
+        <button type="submit" class="btn btn-outline-success "formaction="/account/chpass"><i class="fa fa-file" aria-hidden="true" hrf=""></i> Change Passwords</button>
+
+        </form>
+
+
+
+    </div>
+    
+</div>
