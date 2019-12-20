@@ -11,7 +11,6 @@ router.get('/register', (req, res) =>{
 })
 
 router.post('/register', async (req, res) => {
-    console.log(req.body);
     const N = 10;
     const hash = bcrypt.hashSync(req.body.txtPass, N);
     const dob = moment(req.body.txtDOB, 'DD/MM/YYYY').format('YYYY-MM-DD');
@@ -78,15 +77,40 @@ router.get('/profile',async(req,res)=>{
     if(req.session.isAuthenticated==false){
         return res.redirect('/account/login?retUrl=/account/profile');
     }
-    
     const profile=await userModel.singleByUsername(req.session.authUser.TenDangNhap);
     delete profile.MatKhau;
-    console.log(profile);
+    
     profile.NgaySinh = moment(profile.NgaySinh, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
     res.render('vwAccount/profile',{
         infor:profile
     });
 
 })
+
+router.post('/account/del',async(req,res)=>{
+
+})
+router.post('/patch',async(req,res)=>{
+    const dob = moment(req.body.txtNgaySinh, 'DD/MM/YYYY').format('YYYY-MM-DD');
+    const entity={
+        IdNguoiDung:req.body.txtIdNguoiDung,
+        HoVaTen: req.body.txtHoVaTen,
+        Email: req.body.txtEmail,
+        NgaySinh: dob,
+        //MatKhau:req.body.txtnewpass
+
+    }
+    //if(req.body.txtnewpass==='')
+    //{
+        delete entity.MatKhau;
+    //}
+    //const user= await userModel.singleByEmail(req.body.txtEmail);
+    
+    //const rs=bcrypt.compareSync(req.body.txtpass,user.MatKhau);
+    
+    const result=await userModel.patch(entity);
+    res.redirect('/account/profile');
+})
+
 
 module.exports = router;

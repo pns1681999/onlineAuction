@@ -10,6 +10,11 @@ module.exports = {
     if(rows.length===0)return null;
     return rows[0];
   },
+  singleByEmail: async Email=>{
+    const rows= await db.load(`select * from nguoidung where Email= '${Email}'`);
+    if(rows.length===0)return null;
+    return rows[0];
+  },
   patch: entity => {
     const condition = { IdNguoiDung: entity.IdNguoiDung };
     delete entity.IdNguoiDung;

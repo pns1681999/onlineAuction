@@ -7,30 +7,44 @@
         <form method="POST">
         <div class="form-group">
             <label for="IdNguoiDung">#</label>
-            <input type="text" class="form-control" id="IdNguoiDung"name="IdNguoiDung" readonly value="{{this.infor.IdNguoiDung}}" >
+            <input type="text" class="form-control" id="txtIdNguoiDung"name="txtIdNguoiDung" readonly value="{{this.infor.IdNguoiDung}}" >
         </div>
         <div class="form-group">
             <label for="HoVaTen">Tên người dùng</label>
-            <input type="text" class="form-control" id="HoVaTen"name="HoVaTen"   value="{{this.infor.HoVaTen}}">
+            <input type="text" class="form-control" id="txtHoVaTen"name="txtHoVaTen"   value="{{this.infor.HoVaTen}}">
         </div>
         
         <div class="form-group">
             <label for="CatID">Email</label>
-            <input type="text" class="form-control" id="Email"name="Email"   value="{{this.infor.Email}}">
+            <input type="text" class="form-control" id="txtEmail"name="txtEmail"   value="{{this.infor.Email}}">
+        </div>
+        <div class="form-group">
+            <label for="txtnewpass">New Password</label>
+            <input type="text" class="form-control" id="txtnewpass"name="txtnewpass"  >
+        </div>
+        {{#if err_message}}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          {{err_message}}
+        </div>
+        {{/if}}
+        <div class="form-group">
+            <label for="txtnewpass">Password</label>
+            <input type="text" class="form-control" id="txtpass"name="txtpass"  >
         </div>
         <div class="form-group">
             <label for="Email">Ngày sinh</label>
-            <input type="text" class="form-control" id="NgaySinh"name="NgaySinh"  value="{{this.infor.NgaySinh}}">
+            <input type="text" class="form-controll" id="txtNgaySinh"name="txtNgaySinh"  value="{{this.infor.NgaySinh}}">
         </div>
-    
+        <div class="text-right">
         <a  class="btn btn-outline-warning  "href="/" role="button">
             <i class="fa fa-backward" aria-hidden="true"></i>
             Return
         </a>
         <button type="submit" class="btn btn-primary " formaction="/account/patch"><i class="fa fa-check" aria-hidden="true"></i>Save</button>
-        <button type="submit" class="btn btn-outline-danger "formaction="/account/del"><i class="fa fa-trash-o" aria-hidden="true" hrf=""></i>Delete</button>
-        <button type="submit" class="btn btn-outline-success "formaction="/account/chpass"><i class="fa fa-file" aria-hidden="true" hrf=""></i> Change Passwords</button>
-
+        </div>
         </form>
 
 
