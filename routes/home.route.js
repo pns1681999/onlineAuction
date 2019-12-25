@@ -40,4 +40,9 @@ router.get('/', async (req, res) => {
     });
 })
 
+router.post('/',async(req,res)=>{
+    //const product=await productModel.single(req.body.IdSanPham);
+    
+})
+
 module.exports = router;

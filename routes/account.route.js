@@ -3,6 +3,7 @@ const userModel = require('../models/user.model');
 const moment = require('moment');
 const bcrypt = require('bcryptjs');
 const productModel = require('../models/product.model');
+const cart=require("../models/cart.model");
 const config = require('../config/default.json');
 const router = express.Router();
 
@@ -92,25 +93,56 @@ router.post('/account/del',async(req,res)=>{
 })
 router.post('/patch',async(req,res)=>{
     const dob = moment(req.body.txtNgaySinh, 'DD/MM/YYYY').format('YYYY-MM-DD');
+    const hash = bcrypt.hashSync(req.body.txtnewpass, 10);
+
     const entity={
         IdNguoiDung:req.body.txtIdNguoiDung,
         HoVaTen: req.body.txtHoVaTen,
         Email: req.body.txtEmail,
         NgaySinh: dob,
-        //MatKhau:req.body.txtnewpass
+        MatKhau:hash
 
     }
-    //if(req.body.txtnewpass==='')
-    //{
+    if(req.body.txtnewpass==='')
+    {
         delete entity.MatKhau;
-    //}
-    //const user= await userModel.singleByEmail(req.body.txtEmail);
+    }
+    const user= await userModel.singleByEmail(req.body.txtEmail);
     
-    //const rs=bcrypt.compareSync(req.body.txtpass,user.MatKhau);
-    
+    const rs=bcrypt.compareSync(req.body.txtpass,user.MatKhau);
+    if(rs===true)
+    {
+
     const result=await userModel.patch(entity);
+    }
     res.redirect('/account/profile');
 })
 
+
+router.get("/wishlist",async(req,res)=>{
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/account/wishlist');
+    }
+    const products=await cart.single(req.session.authUser.IdNguoiDung);
+    for (let c of products)
+    c.NgayHetHan = moment(products[0].NgayHetHan, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
+    console.log(products);
+    res.render("vwAccount/wishlist",{
+        product:products
+    });
+
+})
+
+router.post("/cart",async(req,res)=>{
+    let entity=await productModel.cartinf(+req.body.txtId,+req.body.txtName);
+
+    console.log(entity);
+    if(req.body.txtName!='')
+    cart.add(entity);
+    res.redirect('/');
+    
+
+
+})
 
 module.exports = router;

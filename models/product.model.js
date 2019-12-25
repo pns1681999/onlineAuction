@@ -19,6 +19,7 @@ module.exports = {
                                         ) c limit ${config.paginate.limit} OFFSET ${offset}`),
 
   single: id => db.load(`select * from sanpham where IdSanPham = ${id}`),
+  cartinf: (id,id2) => db.load(`select IdSanPham,TenSanPham,NgayHetHan,IdNguoiDung from sanpham,nguoidung where IdSanPham = ${id} and IdNguoiDung=${id2} `),
   add: entity => db.add('sanpham', entity),
   del: id => db.del('sanpham', { IdSanPham: id }),
   patch: entity => {
