@@ -58,14 +58,17 @@ router.post('/login',async(req,res)=>{
     delete user.MatKhau;
     req.session.isAuthenticated=true;
     req.session.authUser=user;
-    const url=req.query.retUrl||'/';
-    res.redirect(url);
 
-
-
-
-
-
+    if (user.LoaiNguoiDung==0)
+    {
+        const url=req.query.retUrl||'/admin/home';
+        res.redirect(url);
+    }
+    else 
+    {
+        const url=req.query.retUrl||'/';
+        res.redirect(url);
+    }
 })
 router.post('/logout',(req,res)=>{
     req.session.isAuthenticated=false;
