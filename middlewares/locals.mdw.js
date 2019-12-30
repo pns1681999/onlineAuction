@@ -12,7 +12,6 @@ module.exports = function (app) {
     res.locals.isAuthenticated = req.session.isAuthenticated;
     res.locals.authUser = req.session.authUser;
 
-
      for (const c of rows0) {
       rows[c.IdDanhMuc] = await categoryModel.allOfId(c.IdDanhMuc);
      }
