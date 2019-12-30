@@ -21,7 +21,12 @@ module.exports = function (app) {
      rows[1] = rowsAll
     
     res.locals.lcCategories = rows;
- 
+    if (typeof (req.session.isAuthenticated) === 'undefined') {
+      req.session.isAuthenticated = false;
+    }
+    res.locals.isAuthenticated = req.session.isAuthenticated;
+    res.locals.authUser = req.session.authUser;
+    
     next();
   })
 };

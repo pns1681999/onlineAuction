@@ -4,6 +4,7 @@ const moment = require('moment');
 const bcrypt = require('bcryptjs');
 const productModel = require('../models/product.model');
 const config = require('../config/default.json');
+const restrict = require('../middlewares/auth.mdw');
 const router = express.Router();
 
 router.get('/register', (req, res) =>{
@@ -28,11 +29,14 @@ router.post('/register', async (req, res) => {
     }
 
     const result = await userModel.add(entity);
-    res.render('home');
+    res.redirect('/');
 })
 
 router.get('/login',(req,res)=>{
-    res.render('vwAccount/login', {layout: false});
+    if (req.session.authUser.LoaiNguoiDung === 2)
+        res.render('vwAccount/login', {layout: false});
+    else 
+        res.render('vwError/error');
 
 })
 
@@ -59,12 +63,6 @@ router.post('/login',async(req,res)=>{
     req.session.authUser=user;
     const url=req.query.retUrl||'/';
     res.redirect(url);
-
-
-
-
-
-
 })
 router.post('/logout',(req,res)=>{
     req.session.isAuthenticated=false;
@@ -73,10 +71,7 @@ router.post('/logout',(req,res)=>{
 
 })
 
-router.get('/profile',async(req,res)=>{
-    if(req.session.isAuthenticated==false){
-        return res.redirect('/account/login?retUrl=/account/profile');
-    }
+router.get('/profile', restrict,  async(req,res)=>{
     const profile=await userModel.singleByUsername(req.session.authUser.TenDangNhap);
     delete profile.MatKhau;
     

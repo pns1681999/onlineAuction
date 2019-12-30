@@ -1,5 +1,6 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
+const hbs_sections = require('express-handlebars-sections');
 const morgan = require('morgan');
 const numeral = require('numeral');
 const Handlebars = require('handlebars');
@@ -24,6 +25,7 @@ app.engine('hbs', exphbs({
   defaultLayout: 'main.hbs',
   layoutsDir: 'views/_layouts',
   helpers: {
+    section: hbs_sections(),
     format: val => numeral(val).format('0,0'),
   }
 }));
