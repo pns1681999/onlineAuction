@@ -62,14 +62,14 @@ router.post('/insertProduct', async (req, res) => {
     });
 })
 
-router.get('/productAvailable', restrict, (req, res) => {
+router.get('/productAvailable', restrict, async (req, res) => {
     for (const c of res.locals.lcCategories[1]) {
         if (c.IdDanhMuc === +req.params.id) {
           c.isActive = true;
         }
     }
 
-    const catId = req.params.id;
+    const sellerId = res.locals.authUser.IdNguoiDung;
     const limit = config.paginate.limit;
 
     let page = req.query.page || 1;
@@ -77,8 +77,8 @@ router.get('/productAvailable', restrict, (req, res) => {
     const offset = (page - 1) * config.paginate.limit;
 
     let [total, rows] = await Promise.all([
-        productModel.countByCat(catId),
-        productModel.pageByCat(catId, offset)
+        productModel.countAvailableBySeller(sellerId),
+        productModel.pageAvailableBySeller(sellerId, offset)
     ]);
 
     for (let c of rows) {
@@ -98,7 +98,7 @@ router.get('/productAvailable', restrict, (req, res) => {
         isCurrentPage: i === +page
         })
     }
-    res.render('vwProducts/allByCat', {
+    res.render('vwSeller/ownProduct', {
         num_of_page: nPages,
         isPage: +page,
         products: rows,
@@ -107,8 +107,61 @@ router.get('/productAvailable', restrict, (req, res) => {
         prev_value: +page - 1,
         next_value: +page + 1,
     });
-    res.render('vwSeller/insertProduct');
 })
 
+router.get('/productAuctioned', restrict, async (req, res) => {
+    for (const c of res.locals.lcCategories[1]) {
+        if (c.IdDanhMuc === +req.params.id) {
+          c.isActive = true;
+        }
+    }
 
+    const sellerId = res.locals.authUser.IdNguoiDung;
+    const limit = config.paginate.limit;
+
+    let page = req.query.page || 1;
+    if (page < 1) page = 1;
+    const offset = (page - 1) * config.paginate.limit;
+
+    let [total, rows] = await Promise.all([
+        productModel.countAuctionedBySeller(sellerId),
+        productModel.pageAuctionedBySeller(sellerId, offset)
+    ]);
+
+    for (let c of rows) {
+        let nguoithang = await userModel.single(c.IdNguoiThang);
+        c.NguoiThang = nguoithang[0];
+        c.NgayDang = moment(c.NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
+        c.ThoiHan = moment(c.NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
+    }
+    
+    let nPages = Math.floor(total / limit);
+    if (total % limit > 0) nPages++;
+    if (page > nPages) page = nPages;
+    let page_numbers = [];
+    for (i = 1; i <= nPages; i++) {
+        page_numbers.push({
+        value: i,
+        isCurrentPage: i === +page
+        })
+    }
+    res.render('vwSeller/ownProduct', {
+        num_of_page: nPages,
+        isPage: +page,
+        products: rows,
+        empty: rows.length === 0,
+        page_numbers,
+        prev_value: +page - 1,
+        next_value: +page + 1,
+    });
+})
+
+router.post('/addDescription/:id', restrict, async (req, res) => {
+    const id = req.params.id;
+    let rows = await productModel.single(id);
+    let current = moment().format('DD-MM-YYYY');
+    rows[0].ChiTiet = rows[0].ChiTiet + '<br>- <span class = "fa fa-pencil"></span> '+current+':<br>'+req.body.FullDes;
+    const result = await productModel.patch(rows[0]);
+    res.redirect('/products/'+id);
+})
 module.exports = router;
