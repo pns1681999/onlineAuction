@@ -34,11 +34,7 @@ router.post('/register', async (req, res) => {
 })
 
 router.get('/login',(req,res)=>{
-    if (req.session.authUser.LoaiNguoiDung === 2)
         res.render('vwAccount/login', {layout: false});
-    else 
-        res.render('vwError/error');
-
 })
 
 router.post('/login',async(req,res)=>{
@@ -139,12 +135,16 @@ router.get("/wishlist",async(req,res)=>{
 })
 
 router.post("/cart",async(req,res)=>{
+    console.log(req.body.txtId);
+    console.log(req.body.txtName);
+
     let entity=await productModel.cartinf(+req.body.txtId,+req.body.txtName);
 
     console.log(entity);
     if(req.body.txtName!='')
     cart.add(entity);
-    res.redirect('/');
+    const url=req.query.retUrl||'/';
+    res.redirect(url);
     
 
 
