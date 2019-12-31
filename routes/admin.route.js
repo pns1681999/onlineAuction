@@ -8,9 +8,15 @@ const config = require('../config/default.json');
 const router = express.Router();
 
 router.get('/home',(req,res)=>{
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/home');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission', {layout: false});
+    
     res.render('vwAdmin/home', {layout: false});
 })
-
 
 router.post('/logout',(req,res)=>{
     req.session.isAuthenticated=false;
