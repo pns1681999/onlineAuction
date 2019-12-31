@@ -5,5 +5,6 @@
     app.use('/search', require('../routes/search.route'));
     app.use('/account', require('../routes/account.route'));
     app.use('/admin', require('../routes/admin.route'));
+    app.use('/seller', require('../routes/seller.route'));
  };
 

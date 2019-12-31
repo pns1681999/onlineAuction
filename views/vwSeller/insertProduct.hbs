@@ -12,7 +12,7 @@
         dropZoneEnabled: false,
         showUpload: false,
         showRemove: false,
-        maxFileCount: 10,
+        minFileCount: 3,
         allowedFileExtensions: ['png', 'jpg', 'gif'],
     });
 </script>
@@ -35,11 +35,11 @@
     //Hàm kiểm tra form hợp lệ
     function isInvalidForm() {
         var data = [];
-        data[0] = document.getElementById('txtTensanpham').value;      	//Email
-        data[1] = document.getElementById('fuMain').value;     //Username
-        data[2] = document.getElementById('numGiakhoidiem').value;       	//Password
-        data[3] = document.getElementById('numBuocgia').value;		//Confirm password
-        data[4] = document.getElementById('numGiamuangay');			//Check Agree
+        data[0] = document.getElementById('txtTensanpham').value;      	
+        data[1] = document.getElementById('fuMain').value;    
+        data[2] = document.getElementById('numGiakhoidiem').value;    
+        data[3] = document.getElementById('numBuocgia').value;		
+        data[4] = document.getElementById('numGiamuangay');		
         data[5] = document.getElementById('txtFullDes');
         data[6] = document.getElementById('giahan');
         var temp_0 = 1;
@@ -50,17 +50,24 @@
         var temp_5 = 1;
         var temp_6 = 1;
 
-        if (data[0] === "")
+        if (data[0] === "") {
             temp_0 = 0;
+            $('#checkTensanpham').addClass("text-danger");
+        }
 
-        if (data[1] === "")
+        if (data[1] === "") {
             temp_1 = 0;
+        }
 
-        if (data[2] === "")
+        if (data[2] === "") {
             temp_2 = 0;
+            $('#checkGiakhoidiem').addClass("text-danger");
+        }
 
-        if (data[3] === "")
+        if (data[3] === "") {
             temp_3 = 0;
+            $('#checkBuocgia').addClass("text-danger");
+        }
 
         if ((temp_1 === 1) && (temp_2 === 1) && (temp_3 === 1) && (temp_4 === 1) && (temp_5 === 1) && (temp_6 === 1) && (temp_0 === 1)) {
             return true;
@@ -94,12 +101,12 @@
                     <h4 class="login-title">Insert Product</h4>
                     <div class="row">
                         <div class="col-6 mb-20">
-                            <label>Tên sản phẩm*</label>
+                            <label id="checkTensanpham">Tên sản phẩm (*)</label>
                             <input class="mb-0" type="text" id="txtTensanpham" name="txtTensanpham"
                                 placeholder="Tên sản phẩm">
                         </div>
                         <div class="col-6 mb-20">
-                            <label>Loại sản phẩm</label>
+                            <label>Loại sản phẩm (*)</label>
                             <select class="nice-select select-search-category" id="idCat" name="idCat">
                                 {{#each lcCategories.[0]}}
                                 <option value="{{IdDanhMuc}}">{{TenDanhMuc}}</option>
@@ -113,21 +120,21 @@
                             </select>
                         </div>
                         <div class="col-12 mb-20">
-                            <label>Hình ảnh*</label>
-                            <input id="fuMain" id="fuMain" name="fuMain" type="file">
+                            <label>Hình ảnh</label>
+                            <input id="fuMain" id="fuMain" name="fuMain" type="file" multiple>
                         </div>
                         <div class="col-4 mb-20">
-                            <label>Giá khởi điểm*</label>
-                            <input class="mb-0" id="numGiakhoidiem" name="numGiakhoidiem" type="number"
+                            <label id="checkGiakhoidiem">Giá khởi điểm (*)</label>
+                            <input class="mb-0" id="numGiakhoidiem" name="numGiakhoidiem" type="number" min = "0"
                                 placeholder="VND">
                         </div>
                         <div class="col-4 mb-20">
-                            <label>Bước giá*</label>
-                            <input class="mb-20" id="numBuocgia" name="numBuocGia" type="number" placeholder="VND">
+                            <label id="checkBuocgia">Bước giá (*)</label>
+                            <input class="mb-20" id="numBuocgia" name="numBuocGia" type="number" min = "0" placeholder="VND">
                         </div>
                         <div class="col-4 mb-20">
                             <label>Giá mua ngay</label>
-                            <input class="mb-20" id="numGiamuangay" name="numGiamuangay" type="number"
+                            <input class="mb-20" id="numGiamuangay" name="numGiamuangay" type="number" min = "0"
                                 placeholder="VND">
                         </div>
 

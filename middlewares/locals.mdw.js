@@ -23,7 +23,15 @@ module.exports = function (app) {
     if (typeof (req.session.isAuthenticated) === 'undefined') {
       req.session.isAuthenticated = false;
     }
+    if (typeof (req.session.isSeller) === 'undefined') {
+      req.session.isSeller = false;
+    }
+    if (typeof (req.session.isAdmin) === 'undefined') {
+      req.session.isAdmin = false;
+    }
     res.locals.isAuthenticated = req.session.isAuthenticated;
+    res.locals.isSeller = req.session.isSeller;
+    res.locals.isAdmin = req.session.isAdmin;
     res.locals.authUser = req.session.authUser;
     
     next();

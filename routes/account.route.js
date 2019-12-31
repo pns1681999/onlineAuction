@@ -34,10 +34,7 @@ router.post('/register', async (req, res) => {
 })
 
 router.get('/login',(req,res)=>{
-    if (req.session.authUser.LoaiNguoiDung === 2)
         res.render('vwAccount/login', {layout: false});
-    else 
-        res.render('vwError/error');
 
 })
 
@@ -61,6 +58,10 @@ router.post('/login',async(req,res)=>{
     }
     delete user.MatKhau;
     req.session.isAuthenticated=true;
+    if (user.LoaiNguoiDung === 0)
+        req.session.isAdmin=true;
+    if (user.LoaiNguoiDung === 2)
+        req.session.isSeller=true;
     req.session.authUser=user;
 
 
@@ -77,6 +78,8 @@ router.post('/login',async(req,res)=>{
 })
 router.post('/logout',(req,res)=>{
     req.session.isAuthenticated=false;
+    req.session.isAdmin=false;
+    req.session.isSeller=false;
     req.session.authUser=null;
      res.redirect('/');
 
