@@ -12,6 +12,7 @@
     "express-session": "^1.17.0",
     "just-handlebars-helpers": "^1.0.17",
     "lunr": "^2.3.8",
+    "mask-text": "^1.0.3",
     "md5.js": "^1.3.5",
     "moment": "^2.24.0",
     "morgan": "^1.9.1",

@@ -7,7 +7,7 @@ const cart=require("../models/cart.model");
 const config = require('../config/default.json');
 const restrict = require('../middlewares/auth.mdw');
 const router = express.Router();
-
+const aution=require('../models/aution.model');
 router.get('/register', (req, res) =>{
     res.render('vwAccount/register', {layout: false});
 })
@@ -141,19 +141,43 @@ router.get("/wishlist",async(req,res)=>{
 })
 
 router.post("/cart",async(req,res)=>{
-    console.log(req.body.txtId);
-    console.log(req.body.txtName);
-
     let entity=await productModel.cartinf(+req.body.txtId,+req.body.txtName);
-
-    console.log(entity);
     if(req.body.txtName!='')
     cart.add(entity);
     const url=req.query.retUrl||'/';
     res.redirect(url);
-    
-
-
 })
+
+
+
+router.post("/deal",async(req,res)=>{
+    
+    const user=await userModel.single(+req.body.txtName);
+    if((user[0].DiemCong*100)/(user[0].DiemCong+user[0].DiemTru)>=80)
+    {
+        //cập nhật thẳng lên db
+        
+        entity={
+            IdSanPham:req.body.txtId,
+            IdNguoiDung:req.body.txtName,
+            TenNguoiMua:user[0].HoVaTen,
+            Gia:req.body.txtprice,
+            NgayDauGia:moment().format("YYYY-MM-DD hh:mm:ss")
+        }
+
+        aution.add(entity);
+        console.log(entity);
+
+    }
+    else{
+        //gửi cho seller xem xét, nếu seller chấp nhận thì mới cập nhật lên dbdb
+
+    }
+
+    
+    const url=req.query.retUrl;
+    res.redirect(url);
+})
+
 
 module.exports = router;

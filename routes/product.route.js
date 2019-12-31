@@ -1,5 +1,6 @@
 const express = require('express');
 const moment = require('moment');
+const mask=require('mask-text');
 const userModel = require('../models/user.model');
 const productModel = require('../models/product.model');
 const config = require('../config/default.json');
@@ -7,7 +8,7 @@ const multer = require('multer');
 const restrict = require('../middlewares/auth.mdw');
 const fs = require('fs');
 
-
+const aution=require('../models/aution.model');
 
 
 const router = express.Router();
@@ -16,7 +17,7 @@ router.get('/:id', async (req, res) => {
 
 
     let rows = await productModel.single(req.params.id);
-
+    let bidders=await aution.single(req.params.id);
     let [rows1, nguoiban, nguoithang] = await Promise.all([
         productModel.allByCat(rows[0].LoaiSanPham),
         userModel.single(rows[0].IdNguoiBan),
@@ -33,7 +34,12 @@ router.get('/:id', async (req, res) => {
         c.ThoiHan = moment(c.NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
     }
 
-    //console.log(rows1);
+    for(let c of bidders){
+        c.NgayDauGia=moment(c.NgayDauGia, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY hh:mm");
+        c.TenNguoiMua=mask(c.TenNguoiMua,0,c.TenNguoiMua.length-4,'*');
+    }
+
+    console.log(bidders);
 
     rows[0].NgayDang = moment(rows[0].NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
     rows[0].ThoiHan = moment(rows[0].NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
@@ -41,7 +47,8 @@ router.get('/:id', async (req, res) => {
         SanPhamLienQuan: rows1,
         product: rows[0],
         NguoiBan: nguoiban[0],
-        NguoiThang: nguoithang[0]
+        NguoiThang: nguoithang[0],
+        danhsachdaugia:bidders
     });
 })
 
