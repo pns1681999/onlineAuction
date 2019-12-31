@@ -157,9 +157,13 @@
                             </form>
                         </div>
                         <div class="product-additional-info pt-25">
-                            <a class="wishlist-btn" href="wishlist.html"><i class="fa fa-heart-o"></i>Thêm vào
-                                Watch list</a>
-
+                            <form method="POST">
+                            <input id="txtName" name="txtName" style="display:none;" value={{authUser.IdNguoiDung}}></input>
+                            <input id="txtId" name="txtId" style="display:none;" value={{product.IdSanPham}}></input>
+                            
+                            <button  class="add-to-cart" style="border:none; background:0"  formaction="/account/cart?retUrl=/products/{{product.IdSanPham}}" type="submit"><i
+                                                            class="fa fa-heart-o"></i></button>
+                            </form>
                         </div>
                         <div class="block-reassurance">
                             <ul>

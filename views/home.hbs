@@ -178,7 +178,7 @@
                                             <ul class="add-actions-link">
                                                 <li class="add-cart active"><a href="#"><span
                                                             class="fa fa-shopping-cart"></span> {{format GiaMuaNgay}} VND</a></li>
-                                                <li ><button class="links-details" formaction="/account/cart" type="submit"><i
+                                                <li ><button style="border:none; background:0"  formaction="/account/cart" type="submit"><i
                                                             class="fa fa-heart-o"></i></button></li>
                                                 <li><a href="#" title="quick view" class="quick-view-btn"
                                                         data-toggle="modal" data-target="#exampleModalCenter"><i
@@ -214,6 +214,10 @@
                     <div class="special-product-active owl-carousel">
                         {{#each this.most_bids}}
                         <div class="col-lg-12">
+                            <form method="POST">
+                                <input id="txtName" name="txtName" style="display:none;" value={{../authUser.IdNguoiDung}}></input>
+                                <input id="txtId" name="txtId" style="display:none;" value={{IdSanPham}}></input>
+                
                             <!-- single-product-wrap start -->
                             <div class="single-product-wrap">
                                 <div class="product-image">
@@ -253,8 +257,8 @@
                                         <ul class="add-actions-link">
                                             <li class="add-cart active"><a href="#"><span
                                                         class="fa fa-shopping-cart"></span> {{format GiaMuaNgay}} VND</a></li>
-                                            <li><a class="links-details" href="wishlist.html"><i
-                                                        class="fa fa-heart-o"></i></a></li>
+                                            <li ><button style="border:none; background:0"  formaction="/account/cart" type="submit"><i
+                                                            class="fa fa-heart-o"></i></button></li>
                                             <li><a href="#" title="quick view" class="quick-view-btn"
                                                     data-toggle="modal" data-target="#exampleModalCenter"><i
                                                         class="fa fa-eye"></i></a></li>
@@ -263,6 +267,7 @@
                                 </div>
                             </div>
                             <!-- single-product-wrap end -->
+                        </form>
                         </div>
                         {{/each}}
                     </div>
@@ -288,6 +293,10 @@
                     <div class="special-product-active owl-carousel">
                         {{#each this.high_bid}}
                         <div class="col-lg-12">
+                        <form method="POST">
+                            <input id="txtName" name="txtName" style="display:none;" value={{../authUser.IdNguoiDung}}></input>
+                            <input id="txtId" name="txtId" style="display:none;" value={{IdSanPham}}></input>
+                            
                             <!-- single-product-wrap start -->
                             <div class="single-product-wrap">
                                 <div class="product-image">
@@ -327,8 +336,8 @@
                                         <ul class="add-actions-link">
                                             <li class="add-cart active"><a href="#"><span
                                                         class="fa fa-shopping-cart"></span> {{format GiaMuaNgay}} VND</a></li>
-                                            <li><a class="links-details" href="wishlist.html"><i
-                                                        class="fa fa-heart-o"></i></a></li>
+                                            <li ><button style="border:none; background:0"  formaction="/account/cart" type="submit"><i
+                                                            class="fa fa-heart-o"></i></button></li>
                                             <li><a href="#" title="quick view" class="quick-view-btn"
                                                     data-toggle="modal" data-target="#exampleModalCenter"><i
                                                         class="fa fa-eye"></i></a></li>
@@ -337,6 +346,7 @@
                                 </div>
                             </div>
                             <!-- single-product-wrap end -->
+                            </form>
                         </div>
                         {{/each}}
                     </div>
