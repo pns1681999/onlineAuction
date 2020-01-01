@@ -1,5 +1,6 @@
 const express = require('express');
 const userModel = require('../models/user.model');
+const categoryModel = require('../models/category.model');
 const moment = require('moment');
 const bcrypt = require('bcryptjs');
 const productModel = require('../models/product.model');
@@ -13,7 +14,7 @@ router.get('/home',(req,res)=>{
     }
     
     if (req.session.authUser.LoaiNguoiDung!=0)
-        return res.render('vwError/permission', {layout: false});
+        return res.render('vwError/permission');
     
     res.render('vwAdmin/home', {layout: false});
 })
@@ -69,6 +70,30 @@ router.post('/patch',async(req,res)=>{
     res.redirect('/account/profile');
 })
 
+router.get('/category/list', async (req, res) =>{
+    const rows = await categoryModel.all();
+    
+    res.render('vwAdmin/category/list',  {
+        danhmuc: rows,
+        empty: rows.length === 0,
+        layout: false
+      });
+})
+
+router.get('/category/add', (req, res) =>{
+    res.render('vwAdmin/category/add', {layout: false});
+})
+
+router.post('/category/add', async (req, res) => {
+    let entity = {
+        TenDanhMuc: req.body.txtCatName,
+        ThuocDanhMuc: req.body.txtCatType,
+    }
+
+    const result=await categoryModel.add(entity);
+    
+    res.render('vwAdmin/home');
+})
 
 
 module.exports = router;

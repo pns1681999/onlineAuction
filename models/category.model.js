@@ -1,5 +1,6 @@
 const db = require('../utils/db');
 
+
 module.exports = {
   all: () => db.load('select * from danhmuc'),
   single: id => db.load(`select * from danhmuc where IdDanhMuc = ${id}`),
