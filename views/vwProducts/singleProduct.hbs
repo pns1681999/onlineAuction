@@ -131,10 +131,12 @@
                             <span class="end-date1">expired {{product.ThoiHan}}</span>
                         </div>
                         <br>
-                        <div class="price-box">
+                        <div  class="price-box">
                             <span class="new-price"><span class="fa fa-gavel"></span> {{product.SoLuotRaGia}}</span>
                             <span class="new-price new-price-21">{{format product.GiaHienTai}} VND</span>
+                            
                         </div>
+                        
                         <div class="rating-box pt-20">
                             <ul class="rating rating-with-review-item">
                                 <h5 class="manufacturer">
@@ -150,9 +152,13 @@
                             <form method="POST" class="cart-quantity">
                                 <div class="quantity">
                                     <label>Tham gia đấu giá</label>
+                                    <div class="price-box">
+                                <span>bước giá: </span>
+                                <span >{{format product.BuocGia}}</span>
+                                </div class="price-box">
                                     <input id="txtId" name="txtId" style="display:none;" value={{product.IdSanPham}}></input>
                                     <input id="txtName" name="txtName" style="display:none;" value={{authUser.IdNguoiDung}}></input>
-                                    <input type="number" name="txtprice" id="fillmoney" placeholder="VND">
+                                    <input type="number" name="txtSoBuocGia" id="fillmoney" placeholder="Nhập số bước giá">
                                 </div>
                                 <button class="add-to-cart" type="submit" formaction="/account/deal?retUrl=/products/{{product.IdSanPham}}">Ra giá</button>
                             </form>

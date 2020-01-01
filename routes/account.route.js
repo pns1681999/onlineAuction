@@ -151,7 +151,7 @@ router.post("/cart",async(req,res)=>{
 
 
 router.post("/deal",async(req,res)=>{
-    
+    const sp=await productModel.single(+req.body.txtId);
     const user=await userModel.single(+req.body.txtName);
     if((user[0].DiemCong*100)/(user[0].DiemCong+user[0].DiemTru)>=80)
     {
@@ -161,12 +161,11 @@ router.post("/deal",async(req,res)=>{
             IdSanPham:req.body.txtId,
             IdNguoiDung:req.body.txtName,
             TenNguoiMua:user[0].HoVaTen,
-            Gia:req.body.txtprice,
+            Gia:+req.body.txtSoBuocGia* sp[0].BuocGia+ sp[0].GiaHienTai,
             NgayDauGia:moment().format("YYYY-MM-DD hh:mm:ss")
         }
 
         aution.add(entity);
-        console.log(entity);
 
     }
     else{

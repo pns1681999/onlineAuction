@@ -29,17 +29,19 @@ router.get('/:id', async (req, res) => {
     }
     for (let c of rows1) {
         let nguoithang = await userModel.single(c.IdNguoiThang);
+        
         c.NguoiThang = nguoithang[0];
         c.NgayDang = moment(c.NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
         c.ThoiHan = moment(c.NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
     }
+    nguoithang[0].HoVaTen=mask(nguoithang[0].HoVaTen,0,nguoithang[0].HoVaTen.length-5,'*');
 
+    console.log(nguoithang);
     for(let c of bidders){
         c.NgayDauGia=moment(c.NgayDauGia, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY hh:mm");
         c.TenNguoiMua=mask(c.TenNguoiMua,0,c.TenNguoiMua.length-4,'*');
     }
 
-    console.log(bidders);
 
     rows[0].NgayDang = moment(rows[0].NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
     rows[0].ThoiHan = moment(rows[0].NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();

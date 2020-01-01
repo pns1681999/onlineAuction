@@ -11,8 +11,8 @@
                                         <thead>
                                             <tr>
                                                 <th class="li-product-remove">remove</th>
-                                                <th class="li-product-thumbnail">images</th>
-                                                <th class="cart-product-name">Product</th>
+                                                <th class="cart-product-id">ProducId</th>
+                                                <th class="cart-product-name">ProductName</th>
                                                 <th> ngayhethan</th>
                                                 <th class="li-product-add-cart">add to cart</th>
                                             </tr>
@@ -21,7 +21,7 @@
                                             {{#each product}}
                                             <tr>
                                                 <td class="li-product-remove"><a href="#"><i class="fa fa-times"></i></a></td>
-                                                <td class="li-product-thumbnail"><img src="images/product/large-size/{{IdSanPham}}.jpg" alt="Li's Product Image"height="10px" width="10px"></td> 
+                                                <td>{{IdSanPham}}</td>
                                                 <td>{{TenSanPham}}</td>
                                                 <td>{{NgayHetHan}}</td>
                                                 <td class="li-product-add-cart"><a href="#">add to cart</a></td>
