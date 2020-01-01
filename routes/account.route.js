@@ -126,16 +126,47 @@ router.post('/patch',async(req,res)=>{
 })
 
 
-router.get("/wishlist",async(req,res)=>{
+router.get("/wishlist",restrict,async(req,res)=>{
     if(req.session.isAuthenticated==false){
         return res.redirect('/account/login?retUrl=/account/wishlist');
     }
-    const products=await cart.single(req.session.authUser.IdNguoiDung);
-    for (let c of products)
-    c.NgayHetHan = moment(products[0].NgayHetHan, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
-    console.log(products);
+
+    const bidderId = res.locals.authUser.IdNguoiDung;
+    const limit = config.paginate.limit;
+    let page = req.query.page || 1;
+    if (page < 1) page = 1;
+    const offset = (page - 1) * config.paginate.limit;
+
+    let [total,rows] = await Promise.all([
+         cart.countWatchedByBidder(bidderId),
+         cart.pageWatchedByBidder(bidderId, offset)
+    ]);
+    
+
+    let nPages = Math.floor(total / limit);
+    if (total % limit > 0) nPages++;
+    if (page > nPages) page = nPages;
+    let page_numbers = [];
+    for (i = 1; i <= nPages; i++) {
+        page_numbers.push({
+        value: i,
+        isCurrentPage: i === +page
+        })
+    }
+    for (c of rows){
+        c.NgayHetHan = moment(rows[0].NgayHetHan, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
+
+    }
+   
+    
     res.render("vwAccount/wishlist",{
-        product:products
+        product:rows,
+        num_of_page: nPages,
+        isPage: +page,
+        empty: rows.length === 0,
+        page_numbers,
+        prev_value: +page - 1,
+        next_value: +page + 1,
     });
 
 })
@@ -163,10 +194,11 @@ router.post("/deal",async(req,res)=>{
             TenNguoiMua:user[0].HoVaTen,
             Gia:+req.body.txtSoBuocGia* sp[0].BuocGia+ sp[0].GiaHienTai,
             NgayDauGia:moment().format("YYYY-MM-DD hh:mm:ss")
-        }
+        };
+        console.log(entity);
+        await aution.add(entity);
 
-        aution.add(entity);
-
+        
     }
     else{
         //gửi cho seller xem xét, nếu seller chấp nhận thì mới cập nhật lên dbdb

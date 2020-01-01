@@ -158,9 +158,14 @@
                                 </div class="price-box">
                                     <input id="txtId" name="txtId" style="display:none;" value={{product.IdSanPham}}></input>
                                     <input id="txtName" name="txtName" style="display:none;" value={{authUser.IdNguoiDung}}></input>
-                                    <input type="number" name="txtSoBuocGia" id="fillmoney" placeholder="Nhập số bước giá">
+                                    <input type="number" name="txtSoBuocGia" id="fillmoney"  value="1" min="1">
                                 </div>
+                                {{#if isAuthenticated}}
                                 <button class="add-to-cart" type="submit" formaction="/account/deal?retUrl=/products/{{product.IdSanPham}}">Ra giá</button>
+                                {{else}}
+                                <button class="add-to-cart"  formaction="/account/login?retUrl=/products/4">Ra giá</button>
+
+                                {{/if }}
                             </form>
                         </div>
                         <div class="product-additional-info pt-25">
