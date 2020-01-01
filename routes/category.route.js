@@ -24,6 +24,7 @@ router.get('/:id/products', async(req, res) => {
         productModel.countByCat(catId),
         productModel.pageByCat(catId, offset)
     ]);
+    const current = moment().format("YYYY-MM-DD hh:mm:ss");
 
     for (let c of rows) {
         let nguoithang = await userModel.single(c.IdNguoiThang);

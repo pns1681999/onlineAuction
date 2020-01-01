@@ -76,18 +76,18 @@
                                                     </ul>
                                                 </div>
                                                 {{else}}
-                                                <form action="/seller/voteLike/bidder={{NguoiThang.IdNguoiDung}}/product={{IdSanPham}}" id="frmLike" method="POST">
+                                                <form action="/seller/voteLike/bidder={{NguoiThang.IdNguoiDung}}/product={{IdSanPham}}" id="frmLike{{IdSanPham}}" method="POST">
                                                 </form>
                                                 <form action="/seller/voteDislike/bidder={{NguoiThang.IdNguoiDung}}/product={{IdSanPham}}"
-                                                    id="frmDislike" method="POST"></form>
+                                                    id="frmDislike{{IdSanPham}}" method="POST"></form>
                                                 <div class="add-actions">
                                                     <ul class="add-actions-link">
                                                         <li class="add-cart active w-50"><a
-                                                                href="javascript: $('#frmLike').submit();"><span
+                                                                href="javascript: $('#frmLike{{IdSanPham}}').submit();"><span
                                                                     class="fa fa-thumbs-up"></span>
                                                             </a></li>
                                                         <li class="add-cart active w-50"><a
-                                                                href="javascript: $('#frmDislike').submit();"><span
+                                                                href="javascript: $('#frmDislike{{IdSanPham}}').submit();"><span
                                                                     class="fa fa-thumbs-down"></span></a></li>
                                                     </ul>
                                                 </div>

@@ -121,7 +121,7 @@ router.post('/', async (req, res) => {
         
     }
 
-    console.log(rowsSearch);
+    //console.log(rowsSearch);
     
     let nPages = Math.floor(total / limit);
     if (total % limit > 0) nPages++;

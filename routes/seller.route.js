@@ -4,13 +4,30 @@ const userModel = require('../models/user.model');
 const productModel = require('../models/product.model');
 const config = require('../config/default.json');
 const multer = require('multer');
+const allowModel = require('../models/allow.model');
 const restrict = require('../middlewares/auth.mdw');
 const fs = require('fs');
+const nodemailer = require('nodemailer');
 
 
 
 
 const router = express.Router();
+
+let transporter = nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+        user: "webapponlineauction@gmail.com",
+        pass: "OnlineAuction99"
+    },
+    tls: {
+        // do not fail on invalid certs
+        rejectUnauthorized: false
+    }
+})
+
 
 router.get('/insertProduct', restrict, (req, res) => {
     res.render('vwSeller/insertProduct');
@@ -121,6 +138,7 @@ router.get('/productAuctioned', restrict, async (req, res) => {
 
     const sellerId = res.locals.authUser.IdNguoiDung;
     const limit = config.paginate.limit;
+    console.log(res.locals.authUser.IdNguoiDung);
 
     let page = req.query.page || 1;
     if (page < 1) page = 1;
@@ -148,6 +166,7 @@ router.get('/productAuctioned', restrict, async (req, res) => {
         isCurrentPage: i === +page
         })
     }
+    
     res.render('vwSeller/ownProduct', {
         isAuctioned: true,
         num_of_page: nPages,
@@ -172,12 +191,21 @@ router.post('/addDescription/:id', restrict, async (req, res) => {
 router.post('/voteLike/bidder=:id1/product=:id2', async(req, res) =>{
     const idBidder=req.params.id1;
     const idProduct=req.params.id2;
+    
+    console.log(idBidder, idProduct);
     let rows1 = await userModel.single(idBidder);
     let rows2 = await productModel.single(idProduct);
     rows1[0].DiemCong = rows1[0].DiemCong + 1;
     rows2[0].DanhGia = 1;
     const result1 = await userModel.patch(rows1[0]);
     const result2 = await productModel.patch(rows2[0]);
+    let check = await transporter.sendMail({
+        from:"webapponlineauction@gmail.com",
+        to: rows1[0].Email,
+        subject: "Thông báo Đánh giá✔", // Subject line
+        text: "Like", // plain text body
+        html: "Bạn được <b>Like</b> tại giao dịch sản phẩm " + rows2[0].TenSanPham // html body
+    });
     res.redirect('/seller/productAuctioned');
 })
 router.post('/voteDislike/bidder=:id1/product=:id2', async(req, res) =>{
@@ -189,7 +217,75 @@ router.post('/voteDislike/bidder=:id1/product=:id2', async(req, res) =>{
     rows2[0].DanhGia = 1;
     const result1 = await userModel.patch(rows1[0]);
     const result2 = await productModel.patch(rows2[0]);
+
+    let check = await transporter.sendMail({
+        from:"webapponlineauction@gmail.com",
+        to: rows1[0].Email,
+        subject: "Thông báo Đánh giá✔", // Subject line
+        text: "Dislike", // plain text body
+        html: "Bạn bị <b>Dislike</b> tại giao dịch sản phẩm " + rows2[0].TenSanPham // html body
+    });
     res.redirect('/seller/productAuctioned');
+})
+
+router.get('/request', async(req, res) => {
+    const seller = res.locals.authUser;
+    let rows = await allowModel.allBySeller(seller.IdNguoiDung);
+    for (let c of rows) {
+        let temp1 = await userModel.single(c.IdNguoiMua);
+        let temp2 = await productModel.single(c.IdSanPham);
+        c.Bidder = temp1[0];
+        c.SanPham = temp2[0];
+    }
+    console.log(rows);
+    res.render('vwSeller/request', {
+        empty: rows.length ===0,
+        listReq: rows
+    });
+})
+
+router.post('/disagree/bidder=:id1/product=:id2', async(req, res) =>{
+    const idBidder=req.params.id1;
+    const idProduct=req.params.id2;
+    const idSeller= res.locals.authUser.IdNguoiDung;
+
+    const bidder = await userModel.single(idBidder);
+    const sanPham = await productModel.single(idProduct);
+    let rows = await allowModel.single(idSeller, idProduct, idBidder);
+    rows[0].Quyen = 0;
+    let result = await allowModel.patch(rows[0]);
+
+    
+    let check = await transporter.sendMail({
+        from:"webapponlineauction@gmail.com",
+        to: bidder[0].Email,
+        subject: "Thông báo", // Subject line
+        text: "Bị cấm", // plain text body
+        html: "Bạn bị <b>cấm</b> ra giá tại giao dịch sản phẩm <b>" + sanPham[0].TenSanPham + "</b>."// html body
+    });
+    res.redirect('/seller/request');
+})
+
+router.post('/agree/bidder=:id1/product=:id2', async(req, res) =>{
+    const idBidder=req.params.id1;
+    const idProduct=req.params.id2;
+    const idSeller= res.locals.authUser.IdNguoiDung;
+
+    const bidder = await userModel.single(idBidder);
+    const sanPham = await productModel.single(idProduct);
+    let rows = await allowModel.single(idSeller, idProduct, idBidder);
+    rows[0].Quyen = 1;
+    let result = await allowModel.patch(rows[0]);
+
+    
+    let check = await transporter.sendMail({
+        from:"webapponlineauction@gmail.com",
+        to: bidder[0].Email,
+        subject: "Thông báo", // Subject line
+        text: "Cấp phép", // plain text body
+        html: "Bạn được <b>cho phép</b> ra giá tại giao dịch sản phẩm <b>" + sanPham[0].TenSanPham + "</b>."// html body
+    });
+    res.redirect('/seller/request');
 })
 
 module.exports = router;
