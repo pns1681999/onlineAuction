@@ -39,10 +39,13 @@ router.post('/insertProduct', async (req, res) => {
             GiaKhoiDiem: req.body.numGiakhoidiem,
             NgayDang: current.format('YYYY-MM-DD hh:mm:ss'),
             NgayHetHan: hethan.format('YYYY-MM-DD hh:mm:ss'),
-            //BuocGia: req.body.numBuocGia,
-            GiaHienTai: 0,
+            BuocGia: req.body.numBuocGia,
+            TuGiaHan: req.body.giahan,
+            TinhTrang: 0,
+            GiaHienTai: req.body.numGiakhoidiem,
             IdNguoiBan: req.session.authUser.IdNguoiDung,
             GiaMuaNgay: req.body.numGiamuangay,
+            DanhGia: 0,
             SoLuotRaGia: 0,
         };
         (async (entity, current) => {
@@ -146,6 +149,7 @@ router.get('/productAuctioned', restrict, async (req, res) => {
         })
     }
     res.render('vwSeller/ownProduct', {
+        isAuctioned: true,
         num_of_page: nPages,
         isPage: +page,
         products: rows,
@@ -164,4 +168,28 @@ router.post('/addDescription/:id', restrict, async (req, res) => {
     const result = await productModel.patch(rows[0]);
     res.redirect('/products/'+id);
 })
+
+router.post('/voteLike/bidder=:id1/product=:id2', async(req, res) =>{
+    const idBidder=req.params.id1;
+    const idProduct=req.params.id2;
+    let rows1 = await userModel.single(idBidder);
+    let rows2 = await productModel.single(idProduct);
+    rows1[0].DiemCong = rows1[0].DiemCong + 1;
+    rows2[0].DanhGia = 1;
+    const result1 = await userModel.patch(rows1[0]);
+    const result2 = await productModel.patch(rows2[0]);
+    res.redirect('/seller/productAuctioned');
+})
+router.post('/voteDislike/bidder=:id1/product=:id2', async(req, res) =>{
+    const idBidder=req.params.id1;
+    const idProduct=req.params.id2;
+    let rows1 = await userModel.single(idBidder);
+    let rows2 = await productModel.single(idProduct);
+    rows1[0].DiemTru = rows1[0].DiemTru + 1;
+    rows2[0].DanhGia = 1;
+    const result1 = await userModel.patch(rows1[0]);
+    const result2 = await productModel.patch(rows2[0]);
+    res.redirect('/seller/productAuctioned');
+})
+
 module.exports = router;

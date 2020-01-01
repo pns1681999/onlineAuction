@@ -61,7 +61,9 @@
                                                     <img src="/images/product/{{IdSanPham}}/1.jpg"
                                                         alt="Li's Product Image">
                                                 </a>
-                                                <!-- <span class="sticker">Top {{sum @key 1}}</span> -->
+                                                {{#if isNew}}
+                                                    <span class="sticker">New</span>
+                                                {{/if}}
                                             </div>
                                             <div class="product_desc">
                                                 <div class="product_desc_info">

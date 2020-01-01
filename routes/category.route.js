@@ -27,6 +27,12 @@ router.get('/:id/products', async(req, res) => {
 
     for (let c of rows) {
         let nguoithang = await userModel.single(c.IdNguoiThang);
+        let thoigianmoi = moment(current, "YYYY-MM-DD hh:mm:ss").subtract(10, 'minutes').format("YYYY-MM-DD hh:mm:ss");
+        console.log(thoigianmoi);
+        if (moment(thoigianmoi).isBefore(c.NgayDang)) 
+            c.isNew = true;
+        else 
+            c.isNew = false;
         c.NguoiThang = nguoithang[0];
         c.NgayDang = moment(c.NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
         c.ThoiHan = moment(c.NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
