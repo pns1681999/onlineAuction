@@ -195,7 +195,6 @@ router.post("/deal",async(req,res)=>{
             Gia:+req.body.txtSoBuocGia* sp[0].BuocGia+ sp[0].GiaHienTai,
             NgayDauGia:moment().format("YYYY-MM-DD hh:mm:ss")
         };
-        console.log(entity);
         await aution.add(entity);
 
         
