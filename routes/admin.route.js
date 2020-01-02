@@ -40,37 +40,45 @@ router.get('/profile',async(req,res)=>{
 
 })
 
-router.post('/account/del',async(req,res)=>{
+// router.post('/account/del',async(req,res)=>{
 
-})
-router.post('/patch',async(req,res)=>{
-    const dob = moment(req.body.txtNgaySinh, 'DD/MM/YYYY').format('YYYY-MM-DD');
-    const hash = bcrypt.hashSync(req.body.txtnewpass, 10);
+// })
 
-    const entity={
-        IdNguoiDung:req.body.txtIdNguoiDung,
-        HoVaTen: req.body.txtHoVaTen,
-        Email: req.body.txtEmail,
-        NgaySinh: dob,
-        MatKhau:hash
+// router.post('/patch',async(req,res)=>{
+//     const dob = moment(req.body.txtNgaySinh, 'DD/MM/YYYY').format('YYYY-MM-DD');
+//     const hash = bcrypt.hashSync(req.body.txtnewpass, 10);
 
-    }
-    if(req.body.txtnewpass==='')
-    {
-        delete entity.MatKhau;
-    }
-    const user= await userModel.singleByEmail(req.body.txtEmail);
+//     const entity={
+//         IdNguoiDung:req.body.txtIdNguoiDung,
+//         HoVaTen: req.body.txtHoVaTen,
+//         Email: req.body.txtEmail,
+//         NgaySinh: dob,
+//         MatKhau:hash
+
+//     }
+//     if(req.body.txtnewpass==='')
+//     {
+//         delete entity.MatKhau;
+//     }
+//     const user= await userModel.singleByEmail(req.body.txtEmail);
     
-    const rs=bcrypt.compareSync(req.body.txtpass,user.MatKhau);
-    if(rs===true)
-    {
+//     const rs=bcrypt.compareSync(req.body.txtpass,user.MatKhau);
+//     if(rs===true)
+//     {
 
-    const result=await userModel.patch(entity);
-    }
-    res.redirect('/account/profile');
-})
+//     const result=await userModel.patch(entity);
+//     }
+//     res.redirect('/account/profile');
+// })
 
 router.get('/category/list', async (req, res) =>{
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/home');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+    
     const rows = await categoryModel.all();
     
     res.render('vwAdmin/category/list',  {
@@ -81,6 +89,13 @@ router.get('/category/list', async (req, res) =>{
 })
 
 router.get('/category/detail/:id', async (req, res) => {
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/home');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+
     const rows1 = await categoryModel.allOfId(req.params.id);
     const rows2 = await categoryModel.allProductsOfId(req.params.id);
     res.render('vwAdmin/category/detail',  {
@@ -93,6 +108,13 @@ router.get('/category/detail/:id', async (req, res) => {
 })
 
 router.get('/category/add', async (req, res) =>{
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/home');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+
     const rows = await categoryModel.all();
     
     res.render('vwAdmin/category/add',  {
@@ -118,6 +140,13 @@ router.post('/category/add', async (req, res) => {
 })
 
 router.get('/category/update/:id', async (req, res) => {
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/home');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+
     const rows = await categoryModel.single(req.params.id);
     const rows_1 = await categoryModel.all();
 
@@ -126,9 +155,6 @@ router.get('/category/update/:id', async (req, res) => {
         danhmuc: rows_1,
         layout: false
     });
-
-    console.log(rows.TenDanhMuc);
-    console.log(rows_1.TenDanhMuc);
 })
 
 router.post('/category/update/:id', async (req, res) => {
@@ -142,5 +168,34 @@ router.post('/category/update/:id', async (req, res) => {
       });
   })
   
+router.get('/category/delete/:id', async (req, res) => {
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/home');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+        
+    const rows1 = await categoryModel.allOfId(req.params.id);
+    const rows2 = await categoryModel.allProductsOfId(req.params.id);
+
+    if (rows1.length==0 && rows2.length==0)
+    {
+        const result = await categoryModel.del(req.params.id);
+
+        const rows = await categoryModel.all();
+        res.render('vwAdmin/category/list',  {
+            danhmuc: rows,
+            empty: rows.length === 0,
+            layout: false
+        });
+    }
+
+    else
+    {
+        res.render('vwAdmin/category/delete',  {layout: false});
+    }
+    
+})
 
 module.exports = router;
