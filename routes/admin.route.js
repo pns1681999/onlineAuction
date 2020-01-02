@@ -80,8 +80,25 @@ router.get('/category/list', async (req, res) =>{
       });
 })
 
-router.get('/category/add', (req, res) =>{
-    res.render('vwAdmin/category/add', {layout: false});
+router.get('/category/detail/:id', async (req, res) => {
+    const rows1 = await categoryModel.allOfId(req.params.id);
+    const rows2 = await categoryModel.allProductsOfId(req.params.id);
+    res.render('vwAdmin/category/detail',  {
+        danhmuc: rows1,
+        sanpham: rows2,
+        empty1: rows1.length == 0,
+        empty2: rows2.length == 0,
+        layout: false
+    });
+})
+
+router.get('/category/add', async (req, res) =>{
+    const rows = await categoryModel.all();
+    
+    res.render('vwAdmin/category/add',  {
+        danhmuc: rows,
+        layout: false
+      });
 })
 
 router.post('/category/add', async (req, res) => {
@@ -90,10 +107,40 @@ router.post('/category/add', async (req, res) => {
         ThuocDanhMuc: req.body.txtCatType,
     }
 
-    const result=await categoryModel.add(entity);
-    
-    res.render('vwAdmin/home');
+    const result = await categoryModel.add(entity);
+
+    const rows = await categoryModel.all();
+    res.render('vwAdmin/category/list',  {
+        danhmuc: rows,
+        empty: rows.length === 0,
+        layout: false
+      });
 })
 
+router.get('/category/update/:id', async (req, res) => {
+    const rows = await categoryModel.single(req.params.id);
+    const rows_1 = await categoryModel.all();
+
+    res.render('vwAdmin/category/update',  {
+        danhmuc1: rows[0],
+        danhmuc: rows_1,
+        layout: false
+    });
+
+    console.log(rows.TenDanhMuc);
+    console.log(rows_1.TenDanhMuc);
+})
+
+router.post('/category/update/:id', async (req, res) => {
+    const result = await categoryModel.patch(req.body);
+
+    const rows = await categoryModel.all();
+    res.render('vwAdmin/category/list',  {
+        danhmuc: rows,
+        empty: rows.length === 0,
+        layout: false
+      });
+  })
+  
 
 module.exports = router;
