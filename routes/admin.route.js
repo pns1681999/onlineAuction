@@ -16,7 +16,7 @@ router.get('/home',(req,res)=>{
     if (req.session.authUser.LoaiNguoiDung!=0)
         return res.render('vwError/permission');
     
-    res.render('vwAdmin/home', {layout: false});
+    res.render('vwAdmin/home', {layout: 'admin_layout.hbs'});
 })
 
 router.post('/logout',(req,res)=>{
@@ -84,7 +84,7 @@ router.get('/category/list', async (req, res) =>{
     res.render('vwAdmin/category/list',  {
         danhmuc: rows,
         empty: rows.length === 0,
-        layout: false
+        layout: 'admin_layout.hbs'
       });
 })
 
@@ -103,7 +103,7 @@ router.get('/category/detail/:id', async (req, res) => {
         sanpham: rows2,
         empty1: rows1.length == 0,
         empty2: rows2.length == 0,
-        layout: false
+        layout: 'admin_layout.hbs'
     });
 })
 
@@ -119,7 +119,7 @@ router.get('/category/add', async (req, res) =>{
     
     res.render('vwAdmin/category/add',  {
         danhmuc: rows,
-        layout: false
+        layout: 'admin_layout.hbs'
       });
 })
 
@@ -135,7 +135,7 @@ router.post('/category/add', async (req, res) => {
     res.render('vwAdmin/category/list',  {
         danhmuc: rows,
         empty: rows.length === 0,
-        layout: false
+        layout: 'admin_layout.hbs'
       });
 })
 
@@ -153,7 +153,7 @@ router.get('/category/update/:id', async (req, res) => {
     res.render('vwAdmin/category/update',  {
         danhmuc1: rows[0],
         danhmuc: rows_1,
-        layout: false
+        layout: 'admin_layout.hbs'
     });
 })
 
@@ -164,7 +164,7 @@ router.post('/category/update/:id', async (req, res) => {
     res.render('vwAdmin/category/list',  {
         danhmuc: rows,
         empty: rows.length === 0,
-        layout: false
+        layout: 'admin_layout.hbs'
       });
   })
   
@@ -187,13 +187,13 @@ router.get('/category/delete/:id', async (req, res) => {
         res.render('vwAdmin/category/list',  {
             danhmuc: rows,
             empty: rows.length === 0,
-            layout: false
+            layout: 'admin_layout.hbs'
         });
     }
 
     else
     {
-        res.render('vwAdmin/category/delete',  {layout: false});
+        res.render('vwAdmin/category/delete',  {layout: 'admin_layout.hbs'});
     }
     
 })
