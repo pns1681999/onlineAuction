@@ -37,7 +37,7 @@ module.exports = {
 
   singleWithDatetime: datetime => db.load(`select * from sanpham where NgayDang = '${datetime}'`),
 
-  cartinf: (id, id2) => db.load(`select IdSanPham,TenSanPham,NgayHetHan,IdNguoiDung from sanpham,nguoidung where IdSanPham = ${id} and IdNguoiDung=${id2} `),
+  cartinf: (id, id2) => db.load(`select IdSanPham,TenSanPham,NgayHetHan,IdNguoiDung,GiaHienTai from sanpham,nguoidung where IdSanPham = ${id} and IdNguoiDung=${id2} `),
 
   add: entity => db.add('sanpham', entity),
   del: id => db.del('sanpham', { IdSanPham: id }),

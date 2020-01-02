@@ -187,6 +187,7 @@ router.get("/wishlist",restrict,async(req,res)=>{
 
 router.post("/cart", async (req, res) => {
     let entity = await productModel.cartinf(+req.body.txtId, +req.body.txtName);
+    console.log(entity);
     if (req.body.txtName != '')
         cart.add(entity);
     const url = req.query.retUrl || '/';
@@ -199,6 +200,7 @@ router.post("/deal", async (req, res) => {
     const sp = await productModel.single(+req.body.txtId);
     const user = await userModel.single(+req.body.txtName);
     const seller = await userModel.single(sp[0].IdNguoiBan);
+    console.log(seller);
     const allow = await allowModel.single(seller[0].IdNguoiDung, sp[0].IdSanPham, user[0].IdNguoiDung);
     let confirm = 0;
     if (typeof (allow[0]) === 'undefined') {
@@ -266,5 +268,50 @@ router.post("/deal", async (req, res) => {
     });
 })
 
+
+router.get("/productAutioning",restrict,async(req,res)=>{
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/account/productAutioning');
+    }
+
+    const bidderId = res.locals.authUser.IdNguoiDung;
+    const limit = config.paginate.limit;
+    let page = req.query.page || 1;
+    if (page < 1) page = 1;
+    const offset = (page - 1) * config.paginate.limit;
+
+    let [total,rows] = await Promise.all([
+         aution.countAutionByBidder(bidderId),
+         aution.pageAutionByBidder(bidderId, offset)
+    ]);
+    
+
+    let nPages = Math.floor(total / limit);
+    if (total % limit > 0) nPages++;
+    if (page > nPages) page = nPages;
+    let page_numbers = [];
+    for (i = 1; i <= nPages; i++) {
+        page_numbers.push({
+        value: i,
+        isCurrentPage: i === +page
+        })
+    }
+    for (c of rows){
+        c.NgayHetHan = moment(rows[0].NgayHetHan, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
+
+    }
+    console.log(rows);
+   
+    res.render("vwAccount/autioning",{
+        product:rows,
+        num_of_page: nPages,
+        isPage: +page,
+        empty: rows.length === 0,
+        page_numbers,
+        prev_value: +page - 1,
+        next_value: +page + 1,
+    });
+
+})
 
 module.exports = router;
