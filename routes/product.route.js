@@ -37,7 +37,6 @@ router.get('/:id', async (req, res) => {
         c.NgayDang = moment(c.NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
         c.ThoiHan = moment(c.NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
     }
-    if(nguoithang[0]!=null)
     nguoithang[0].HoVaTen=mask(nguoithang[0].HoVaTen,0,nguoithang[0].HoVaTen.length-5,'*');
 
     console.log(nguoithang);

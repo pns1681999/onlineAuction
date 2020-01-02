@@ -13,7 +13,6 @@ router.get('/', async (req, res) => {
     ]);
     for (let c of rows1) {
         let nguoithang = await userModel.single(c.IdNguoiThang);
-        if(nguoithang[0]!=null)
         nguoithang[0].HoVaTen=mask(nguoithang[0].HoVaTen,0,nguoithang[0].HoVaTen.length-5,'*');
         c.NguoiThang = nguoithang[0];
         c.NgayDang = moment(c.NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
@@ -22,7 +21,6 @@ router.get('/', async (req, res) => {
     }
     for (let c of rows2) {
         let nguoithang = await userModel.single(c.IdNguoiThang);
-        if(nguoithang[0]!=null)
         nguoithang[0].HoVaTen=mask(nguoithang[0].HoVaTen,0,nguoithang[0].HoVaTen.length-5,'*');
         c.NguoiThang = nguoithang[0];
         c.NgayDang = moment(c.NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
@@ -31,7 +29,6 @@ router.get('/', async (req, res) => {
     }
     for (let c of rows3) {
         let nguoithang = await userModel.single(c.IdNguoiThang);
-        if(nguoithang[0]!=null)
         nguoithang[0].HoVaTen=mask(nguoithang[0].HoVaTen,0,nguoithang[0].HoVaTen.length-5,'*');;
         c.NguoiThang = nguoithang[0];
         c.NgayDang = moment(c.NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
