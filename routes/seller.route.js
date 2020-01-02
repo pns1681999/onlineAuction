@@ -6,6 +6,7 @@ const config = require('../config/default.json');
 const multer = require('multer');
 const allowModel = require('../models/allow.model');
 const restrict = require('../middlewares/auth.mdw');
+const auctionModel = require('../models/aution.model');
 const fs = require('fs');
 const nodemailer = require('nodemailer');
 
@@ -288,4 +289,26 @@ router.post('/agree/bidder=:id1/product=:id2', async(req, res) =>{
     res.redirect('/seller/request');
 })
 
+router.post('/block/bidder=:id1/product=:id2', async(req, res) =>{
+    const idBidder=req.params.id1;
+    const idProduct=req.params.id2;
+    const idSeller= res.locals.authUser.IdNguoiDung;
+
+    const del = await auctionModel.delByBidder(idBidder);
+    const bidder = await userModel.single(idBidder);
+    const sanPham = await productModel.single(idProduct);
+    let rows = await allowModel.single(idSeller, idProduct, idBidder);
+    rows[0].Quyen = 1;
+    let result = await allowModel.patch(rows[0]);
+
+    
+    let check = await transporter.sendMail({
+        from:"webapponlineauction@gmail.com",
+        to: bidder[0].Email,
+        subject: "Thông báo", // Subject line
+        text: "Cấp phép", // plain text body
+        html: "Bạn được <b>cho phép</b> ra giá tại giao dịch sản phẩm <b>" + sanPham[0].TenSanPham + "</b>."// html body
+    });
+    res.redirect('/products/' + idProduct);
+})
 module.exports = router;

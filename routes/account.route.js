@@ -232,7 +232,7 @@ router.post("/deal", async (req, res) => {
                 Quyen: 2 //Chờ duyệt
             }
             allowModel.add(entity);
-            confirm = 0;
+            confirm = 2;
         }
 
     }
