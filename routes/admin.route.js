@@ -8,6 +8,7 @@ const cart=require("../models/cart.model");
 const config = require('../config/default.json');
 const router = express.Router();
 
+///////////////////HOME
 router.get('/home',(req,res)=>{
     if(req.session.isAuthenticated==false){
         return res.redirect('/account/login?retUrl=/admin/home');
@@ -71,6 +72,8 @@ router.get('/profile',async(req,res)=>{
 //     res.redirect('/account/profile');
 // })
 
+
+///////////////////CATEGORY
 router.get('/category/list', async (req, res) =>{
     if(req.session.isAuthenticated==false){
         return res.redirect('/account/login?retUrl=/admin/home');
@@ -196,6 +199,64 @@ router.get('/category/delete/:id', async (req, res) => {
         res.render('vwAdmin/category/delete',  {layout: 'admin_layout.hbs'});
     }
     
+})
+
+///////////////////USER
+router.get('/user/list', async (req, res) =>{
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/home');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+    
+    const rows = await userModel.all();
+    
+    res.render('vwAdmin/user/list',  {
+        nguoidung: rows,
+        empty: rows.length === 0,
+        layout: 'admin_layout.hbs'
+      });
+})
+
+router.get('/user/add', async (req, res) =>{
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/home');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+
+    const rows = await categoryModel.all();
+    
+    res.render('vwAdmin/user/add',  {layout: 'admin_layout.hbs'});
+})
+
+router.post('/user/add', async (req, res) => {
+    const N = 10;
+    const hash = bcrypt.hashSync(req.body.MatKhau, N);
+    const dob = moment(req.body.NgaySinh, 'DD/MM/YYYY').format('YYYY-MM-DD');
+
+    let entity = {
+        TenDangNhap: req.body.TenDangNhap,
+        MatKhau: hash,
+        HoVaTen: req.body.HoVaTen,
+        Email: req.body.Email,
+        NgaySinh: dob,
+        LoaiNguoiDung: req.body.LoaiNguoiDung,
+        DiemCong: 0,
+        DiemTru: 0,
+    }
+
+    const result = await userModel.add(entity);
+
+    const rows = await userModel.all();
+    
+    res.render('vwAdmin/user/list',  {
+        nguoidung: rows,
+        empty: rows.length === 0,
+        layout: 'admin_layout.hbs'
+      });
 })
 
 module.exports = router;
