@@ -126,47 +126,21 @@ router.post('/patch',async(req,res)=>{
 })
 
 
+<<<<<<< HEAD
 router.get("/wishlist",restrict,async(req,res)=>{
     if(req.session.isAuthenticated==false){
+=======
+router.get("/wishlist", async (req, res) => {
+    if (req.session.isAuthenticated == false) {
+>>>>>>> parent of dcf58e1... Merge branch 'master' of https://github.com/pns1681999/onlineAuction
         return res.redirect('/account/login?retUrl=/account/wishlist');
     }
-
-    const bidderId = res.locals.authUser.IdNguoiDung;
-    const limit = config.paginate.limit;
-    let page = req.query.page || 1;
-    if (page < 1) page = 1;
-    const offset = (page - 1) * config.paginate.limit;
-
-    let [total,rows] = await Promise.all([
-         cart.countWatchedByBidder(bidderId),
-         cart.pageWatchedByBidder(bidderId, offset)
-    ]);
-    
-
-    let nPages = Math.floor(total / limit);
-    if (total % limit > 0) nPages++;
-    if (page > nPages) page = nPages;
-    let page_numbers = [];
-    for (i = 1; i <= nPages; i++) {
-        page_numbers.push({
-        value: i,
-        isCurrentPage: i === +page
-        })
-    }
-    for (c of rows){
-        c.NgayHetHan = moment(rows[0].NgayHetHan, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
-
-    }
-   
-    
-    res.render("vwAccount/wishlist",{
-        product:rows,
-        num_of_page: nPages,
-        isPage: +page,
-        empty: rows.length === 0,
-        page_numbers,
-        prev_value: +page - 1,
-        next_value: +page + 1,
+    const products = await cart.single(req.session.authUser.IdNguoiDung);
+    for (let c of products)
+        c.NgayHetHan = moment(products[0].NgayHetHan, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
+    console.log(products);
+    res.render("vwAccount/wishlist", {
+        product: products
     });
 
 })
@@ -181,6 +155,7 @@ router.post("/cart",async(req,res)=>{
 
 
 
+<<<<<<< HEAD
 router.post("/deal",async(req,res)=>{
     const sp=await productModel.single(+req.body.txtId);
     const user=await userModel.single(+req.body.txtName);
@@ -199,6 +174,50 @@ router.post("/deal",async(req,res)=>{
         await aution.add(entity);
 
         
+=======
+router.post("/deal", async (req, res) => {
+    const sp = await productModel.single(+req.body.txtId);
+    const user = await userModel.single(+req.body.txtName);
+    const seller = await userModel.single(sp[0].IdNguoiBan);
+    const allow = await allowModel.single(seller[0].IdNguoiDung, sp[0].IdSanPham, user[0].IdNguoiDung);
+    let confirm = 0;
+    if (typeof (allow[0]) === 'undefined') {
+        if ((user[0].DiemCong * 100) / (user[0].DiemCong + user[0].DiemTru) >= 80) {
+            //cập nhật thẳng lên db
+            let gia = +req.body.txtSoBuocGia * sp[0].BuocGia + sp[0].GiaHienTai,
+            entity = {
+                IdSanPham: req.body.txtId,
+                IdNguoiDung: req.body.txtName,
+                TenNguoiMua: user[0].HoVaTen,
+                Gia: gia,
+                NgayDauGia: moment().format("YYYY-MM-DD hh:mm:ss")
+            }
+            aution.add(entity);
+            confirm = 1;
+            let mail = await transporter.sendMail({
+                from: "webapponlineauction@gmail.com",
+                to: user[0].Email,
+                subject: "Thông báo", // Subject line
+                text: "Kết quả ra giá", // plain text body
+                html: "Bạn được ra giá <b>thành công</b> sản phẩm <b>" + sp[0].TenSanPham + "</b> với giá <b>" + gia + "</b>." // html body
+            });
+
+
+        }
+        else {
+            entity = {
+                IdNguoiBan: seller[0].IdNguoiDung,
+                IdSanPham: sp[0].IdSanPham,
+                IdNguoiMua: user[0].IdNguoiDung,
+                Quyen: 2 //Chờ duyệt
+            }
+            allowModel.add(entity);
+            confirm = 0;
+        }
+    }
+    else if (allow[0].Quyen === 2) {
+        confirm = 2 //chờ duyệt
+>>>>>>> parent of dcf58e1... Merge branch 'master' of https://github.com/pns1681999/onlineAuction
     }
     else{
         //gửi cho seller xem xét, nếu seller chấp nhận thì mới cập nhật lên dbdb

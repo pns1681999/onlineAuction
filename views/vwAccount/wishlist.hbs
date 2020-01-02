@@ -35,39 +35,6 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="paginatoin-area">
-                                    <div class="row">
-                                        <div class="col-lg-6 col-md-6">
-                                            <p></p>
-                                        </div>
-                                        <div class="col-lg-6 col-md-6">
-                                            <ul class="pagination-box">
-                                                {{#if (neq isPage 1)}}
-                                                <li><a href="?page={{prev_value}}" class="Previous"><i
-                                                            class="fa fa-chevron-left"></i>
-                                                        Previous</a>
-                                                </li>
-                                                {{/if}}
-
-                                                {{#each this.page_numbers}}
-                                                {{#if isCurrentPage}}
-                                                <li class="active"><a href="javascript:;">{{value}}</a></li>
-                                                {{else}}
-                                                <li class=""><a href="?page={{value}}">{{value}}</a></li>
-                                                {{/if}}
-                                                {{/each}}
-
-                                                {{#if (neq isPage num_of_page)}}
-                                                <li>
-                                                    <a href="?page={{next_value}}" class="Next"> Next <i
-                                                            class="fa fa-chevron-right"></i></a>
-                                                </li>
-                                                {{/if}}
-
-                                            </ul>
-                                        </div>
-                                    </div>
             </div>
            
             
