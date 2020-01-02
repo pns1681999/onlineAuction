@@ -129,7 +129,10 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="/admin/category/list"><i class="fa fa-circle-o"></i> Xem danh sách danh mục</a></li>
+                <li><a href="/admin/category/detail"><i class="fa fa-circle-o"></i>Xem chi tiết</a></li>
                 <li><a href="/admin/category/add"><i class="fa fa-circle-o"></i>Thêm danh mục</a></li>
+                <li><a href="/admin/category/delete"><i class="fa fa-circle-o"></i>Xóa danh mục</a></li>
+                <li><a href="/admin/category/update"><i class="fa fa-circle-o"></i>Cập nhật danh mục</a></li>
               </ul>
             </li>
             <li class="active treeview">
@@ -150,10 +153,7 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="/admin/product/list"><i class="fa fa-circle-o"></i> Xem danh sách sản phẩm</a></li>
-                <li><a href="/admin/product/detail"><i class="fa fa-circle-o"></i>Xem chi tiết</a></li>
                 <li><a href="/admin/product/add"><i class="fa fa-circle-o"></i>Thêm sản phẩm</a></li>
-                <li><a href="/admin/product/delete"><i class="fa fa-circle-o"></i>Xóa sản phẩm</a></li>
-                <li><a href="/admin/product/update"><i class="fa fa-circle-o"></i>Cập nhật sản phẩm</a></li>
               </ul>
             </li>
         </section>
@@ -164,33 +164,32 @@
       <div class="content-wrapper">
         <!-- Main content -->
         <section class="content">
-            {{#if this.empty}} 
-              <div class="card-body"> 
-                <p class="card-text"> Không có dữ liệu. </p> 
-              </div> 
-            {{else}} 
-              <table class="table table-hover"> 
-                <thead> 
-                  <tr> 
-                    <th scope="col" class="text-center">ID</th> 
-                    <th scope="col">Tên Danh Mục</th> 
-                    <th scope="col">Thuộc Danh Mục</th> 
-                  </tr> 
-                </thead> 
-                <tbody> 
-                  {{#each this.danhmuc}} 
-                  <tr> 
-                    <th scope="row" class="text-center">{{IdDanhMuc}}</th> 
-                    <td>{{TenDanhMuc}}</td> 
-                    <td>{{ThuocDanhMuc}}</td>
-                    <td> <a href="/admin/category/detail/{{IdDanhMuc}}">Xem chi tiết</a></td>
-                    <td> <a href="/admin/category/update/{{IdDanhMuc}}">Sửa</a></td>
-                    <td> <a href="/admin/category/delete/{{IdDanhMuc}}">Xóa</a></td>
-                  </tr> 
-                  {{/each}} 
-                </tbody> 
-              </table> 
-            {{/if}}
+            <div class="card-body">
+                <form method="POST">
+                <div class="form-group">
+                    <label for="IdDanhMuc">ID</label>
+                    <input type="text" class="form-control" id="IdDanhMuc" name="IdDanhMuc" readonly value="{{this.danhmuc1.IdDanhMuc}}">
+                </div>
+                <div class="form-group">
+                    <label for="TenDanhMuc">Tên danh mục</label>
+                    <input type="text" class="form-control" id="TenDanhMuc" name="TenDanhMuc" placeholder="Enter category name"
+                    autofocus value="{{this.danhmuc1.TenDanhMuc}}">
+                </div>
+                <div class="form-group">
+                  <label for="ThuocDanhMuc">Thuộc danh mục</label>
+                  <select id="ThuocDanhMuc" name="ThuocDanhMuc">
+                    <option value="0">None</option>
+                    {{#each this.danhmuc}} 
+                      <option value="{{IdDanhMuc}}">{{TenDanhMuc}}</option>
+                    {{/each}}
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-outline-success">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                    Save
+                </button>
+                </form>
+            </div>
         </section><!-- /.content -->
       </div><!-- /.content-wrapper -->
       <!-- Control Sidebar -->
