@@ -12,9 +12,11 @@ module.exports = {
     return db.patch('danhmuc', entity, condition);
   },
 
-  allOfId: id => db.load(`select * from danhmuc where ThuocDanhMuc = ${id}`) 
+  allOfId: id => db.load(`select * from danhmuc where ThuocDanhMuc = ${id}`),
 
-  // allWithDetails: _ => {
+  allProductsOfId: id => db.load(`select * from sanpham where LoaiSanPham = ${id}`),
+  
+    // allWithDetails: _ => {
   //   const sql = `
   //     select c.CatID, c.CatName, count(p.ProID) as num_of_products
   //     from categories c left join products p on c.CatID = p.CatID

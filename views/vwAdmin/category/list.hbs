@@ -129,10 +129,7 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="/admin/category/list"><i class="fa fa-circle-o"></i> Xem danh sách danh mục</a></li>
-                <li><a href="/admin/category/detail"><i class="fa fa-circle-o"></i>Xem chi tiết</a></li>
                 <li><a href="/admin/category/add"><i class="fa fa-circle-o"></i>Thêm danh mục</a></li>
-                <li><a href="/admin/category/delete"><i class="fa fa-circle-o"></i>Xóa danh mục</a></li>
-                <li><a href="/admin/category/update"><i class="fa fa-circle-o"></i>Cập nhật danh mục</a></li>
               </ul>
             </li>
             <li class="active treeview">
@@ -186,7 +183,9 @@
                     <th scope="row" class="text-center">{{IdDanhMuc}}</th> 
                     <td>{{TenDanhMuc}}</td> 
                     <td>{{ThuocDanhMuc}}</td>
-                    <td> <a href="/admin/category/detail">Xem chi tiết</a></td>
+                    <td> <a href="/admin/category/detail/{{IdDanhMuc}}">Xem chi tiết</a></td>
+                    <td> <a href="/admin/category/update{{IdDanhMuc}}">Sửa</a></td>
+                    <td> <a href="/admin/category/delete{{IdDanhMuc}}">Xóa</a></td>
                   </tr> 
                   {{/each}} 
                 </tbody> 

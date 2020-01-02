@@ -80,8 +80,25 @@ router.get('/category/list', async (req, res) =>{
       });
 })
 
-router.get('/category/add', (req, res) =>{
-    res.render('vwAdmin/category/add', {layout: false});
+router.get('/category/detail/:id', async (req, res) => {
+    const rows1 = await categoryModel.allOfId(req.params.id);
+    const rows2 = await categoryModel.allProductsOfId(req.params.id);
+    res.render('vwAdmin/category/detail',  {
+        danhmuc: rows1,
+        sanpham: rows2,
+        empty1: rows1.length == 0,
+        empty2: rows2.length == 0,
+        layout: false
+    });
+})
+
+router.get('/category/add', async (req, res) =>{
+    const rows = await categoryModel.all();
+    
+    res.render('vwAdmin/category/add',  {
+        danhmuc: rows,
+        layout: false
+      });
 })
 
 router.post('/category/add', async (req, res) => {
@@ -92,7 +109,7 @@ router.post('/category/add', async (req, res) => {
 
     const result=await categoryModel.add(entity);
     
-    res.render('vwAdmin/home');
+    res.render('vwAdmin/category/add', {layout: false});
 })
 
 

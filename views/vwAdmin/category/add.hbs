@@ -153,10 +153,7 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="/admin/product/list"><i class="fa fa-circle-o"></i> Xem danh sách sản phẩm</a></li>
-                <li><a href="/admin/product/detail"><i class="fa fa-circle-o"></i>Xem chi tiết</a></li>
                 <li><a href="/admin/product/add"><i class="fa fa-circle-o"></i>Thêm sản phẩm</a></li>
-                <li><a href="/admin/product/delete"><i class="fa fa-circle-o"></i>Xóa sản phẩm</a></li>
-                <li><a href="/admin/product/update"><i class="fa fa-circle-o"></i>Cập nhật sản phẩm</a></li>
               </ul>
             </li>
         </section>
@@ -175,9 +172,13 @@
                     autofocus>
                 </div>
                 <div class="form-group">
-                    <label for="txtCatType">Thuộc danh mục</label>
-                    <input type="text" class="form-control" id="txtCatType" name="txtCatType"
-                    autofocus>
+                  <label for="txtCatType">Thuộc danh mục</label>
+                  <select id="txtCatType" name="txtCatType">
+                    <option value="0">None</option>
+                    {{#each this.danhmuc}} 
+                      <option value="{{IdDanhMuc}}">{{TenDanhMuc}}</option>
+                    {{/each}}
+                  </select>
                 </div>
                 <button type="submit" class="btn btn-outline-success">
                     <i class="fa fa-check" aria-hidden="true"></i>
