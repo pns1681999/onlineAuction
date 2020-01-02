@@ -164,7 +164,7 @@
                                 {{#if isAuthenticated}}
                                 <button class="add-to-cart" type="submit" formaction="/account/deal?retUrl=/products/{{product.IdSanPham}}">Ra giá</button>
                                 {{else}}
-                                <button class="add-to-cart"  formaction="/account/login?retUrl=/products/4">Ra giá</button>
+                                <button class="add-to-cart"  formaction="/account/login?retUrl=/products/{{product.IdSanPham}}">Ra giá</button>
 
                                 {{/if }}
                             </form>
