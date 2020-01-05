@@ -14,19 +14,8 @@ const aution=require('../models/aution.model');
 const router = express.Router();
 
 router.get('/:id', async (req, res) => {
-    const maxaution=await aution.maxaution(+req.params.id);
-    if(maxaution[0]!=null){
-        maxaution[0].SoLuotRaGia=maxaution[0].SoLuotRaGia+1;
-       const l= await productModel.patch(maxaution[0]);
-    }
-    else{
-        const product=await productModel.single(+req.params.id);
-        entity={
-            IdSanPham:+req.params.id,
-            GiaHienTai:product[0].GiaKhoiDiem
-        }
-        const l= await productModel.patch(entity);
-    }
+    
+    
     let rows = await productModel.single(req.params.id);
     let bidders=await aution.single(req.params.id);
     let [rows1, nguoiban, nguoithang] = await Promise.all([
