@@ -22,7 +22,7 @@ module.exports = {
   },
 
   allOfId: id => db.load(`select * from nguoidung where ThuocDanhMuc = ${id}`) 
-
+  
   // allWithDetails: _ => {
   //   const sql = `
   //     select c.CatID, c.CatName, count(p.ProID) as num_of_products

@@ -21,13 +21,14 @@
                                         <tbody>
                                             {{#each product}}
                                             <tr>
-                                                <td class="li-product-remove"><a href="#"><i class="fa fa-times"></i></a></td>
+                                                
+                                                <td class="li-product-remove"><a href="account/delwishlist/{{IdSanPham}}"><i class="fa fa-times"></i></a></td>
+                                                <input id="txtId" name="txtId" style="display:none;" value={{IdSanPham}}></input>
                                                 <td>{{IdSanPham}}</td>
                                                 <td>{{TenSanPham}}</td>
                                                 <td>{{NgayHetHan}}</td>
                                                 <td>{{GiaHienTai}}</td>
                                                 <td class="li-product-add-cart"><a href="#">add to cart</a></td>
-                                                   
                                             </tr>
                                             {{/each}}
                                         </tbody>

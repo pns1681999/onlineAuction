@@ -19,6 +19,14 @@ router.get('/:id', async (req, res) => {
         maxaution[0].SoLuotRaGia=maxaution[0].SoLuotRaGia+1;
        const l= await productModel.patch(maxaution[0]);
     }
+    else{
+        const product=await productModel.single(+req.params.id);
+        entity={
+            IdSanPham:+req.params.id,
+            GiaHienTai:product[0].GiaKhoiDiem
+        }
+        const l= await productModel.patch(entity);
+    }
     let rows = await productModel.single(req.params.id);
     let bidders=await aution.single(req.params.id);
     let [rows1, nguoiban, nguoithang] = await Promise.all([
@@ -57,5 +65,8 @@ router.get('/:id', async (req, res) => {
         danhsachdaugia:bidders
     });
 })
+
+
+
 
 module.exports = router;
