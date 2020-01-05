@@ -3,7 +3,8 @@ const moment = require('moment');
 const userModel = require('../models/user.model');
 const productModel = require('../models/product.model');
 const config = require('../config/default.json');
-const lunr = require('lunr')
+const lunr = require('lunr');
+const mask=require('mask-text');
 
 const router = express.Router();
 
@@ -32,6 +33,9 @@ router.get('/',  async(req, res) => {
 
     for (let c of rowsSearch) {
         let nguoithang = await userModel.single(c.IdNguoiThang);
+        if(nguoithang[0]!=null)
+        nguoithang[0].HoVaTen=mask(nguoithang[0].HoVaTen,0,nguoithang[0].HoVaTen.length-5,'*');
+
         c.NguoiThang = nguoithang[0];
         c.NgayDang = moment(c.NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
         c.ThoiHan = moment(c.NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
@@ -116,6 +120,9 @@ router.post('/', async (req, res) => {
         else 
             c.isNew = false;
         c.NguoiThang = nguoithang[0];
+        if(nguoithang[0]!=null)
+        nguoithang[0].HoVaTen=mask(nguoithang[0].HoVaTen,0,nguoithang[0].HoVaTen.length-5,'*');
+
         c.NgayDang = moment(c.NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
         c.ThoiHan = moment(c.NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
         
