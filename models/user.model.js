@@ -2,6 +2,8 @@ const db = require('../utils/db');
 
 module.exports = {
   all: () => db.load('select * from nguoidung'),
+  buyer: () => db.load('select * from nguoidung where LoaiNguoiDung=1'),
+  seller: () => db.load('select * from nguoidung where LoaiNguoiDung=2'),
   single: id => db.load(`select * from nguoidung where IdNguoiDung = ${id}`),
   add: entity => db.add('nguoidung', entity),
   del: id => db.del('nguoidung', { IdNguoiDung: id }),
@@ -23,11 +25,4 @@ module.exports = {
 
   allOfId: id => db.load(`select * from nguoidung where ThuocDanhMuc = ${id}`) 
   
-  // allWithDetails: _ => {
-  //   const sql = `
-  //     select c.CatID, c.CatName, count(p.ProID) as num_of_products
-  //     from categories c left join products p on c.CatID = p.CatID
-  //     group by c.CatID, c.CatName`;
-  //   return db.load(sql);
-  // },
 };
