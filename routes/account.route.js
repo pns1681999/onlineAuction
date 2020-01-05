@@ -27,13 +27,29 @@ let transporter = nodemailer.createTransport({
 })
 
 router.get('/register', (req, res) => {
-    res.render('vwAccount/register', { layout: false });
+    res.render('vwAccount/register', { layout: false});
 })
 
 router.post('/register', async (req, res) => {
     const N = 10;
     const hash = bcrypt.hashSync(req.body.txtPass, N);
     const dob = moment(req.body.txtDOB, 'DD/MM/YYYY').format('YYYY-MM-DD');
+
+    let validUsername = await userModel.allByUsername(req.body.txtUsername);
+    if (validUsername.length > 0) {
+        return res.render('vwAccount/register', {
+            layout: false,
+            err_message: 'username is valid'
+        })
+    }
+
+    let validEmail = await userModel.allByEmail(req.body.txtEmail);
+    if (validEmail.length > 0) {
+        return res.render('vwAccount/register', {
+            layout: false,
+            err_message: 'email is valid'
+        })
+    }
 
     let entity = {
 
@@ -187,7 +203,6 @@ router.get("/wishlist",restrict,async(req,res)=>{
 
 router.post("/cart", async (req, res) => {
     let entity = await productModel.cartinf(+req.body.txtId, +req.body.txtName);
-    console.log(entity);
     if (req.body.txtName != '')
         cart.add(entity);
     const url = req.query.retUrl || '/';
@@ -200,7 +215,6 @@ router.post("/deal", async (req, res) => {
     const sp = await productModel.single(+req.body.txtId);
     const user = await userModel.single(+req.body.txtName);
     const seller = await userModel.single(sp[0].IdNguoiBan);
-    console.log(seller);
     const allow = await allowModel.single(seller[0].IdNguoiDung, sp[0].IdSanPham, user[0].IdNguoiDung);
     let confirm = 0;
     if (typeof (allow[0]) === 'undefined') {
@@ -300,7 +314,6 @@ router.get("/productAutioning",restrict,async(req,res)=>{
         c.NgayHetHan = moment(rows[0].NgayHetHan, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
 
     }
-    console.log(rows);
    
     res.render("vwAccount/autioning",{
         product:rows,

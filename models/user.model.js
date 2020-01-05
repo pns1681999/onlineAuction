@@ -10,6 +10,8 @@ module.exports = {
     if(rows.length===0)return null;
     return rows[0];
   },
+  allByEmail: Email => db.load(`select * from nguoidung where Email= '${Email}'`),
+  allByUsername: username => db.load(`select * from nguoidung where TenDangNhap= '${username}'`),
   singleByEmail: async Email=>{
     const rows= await db.load(`select * from nguoidung where Email= '${Email}'`);
     if(rows.length===0)return null;

@@ -12,7 +12,8 @@
         dropZoneEnabled: false,
         showUpload: false,
         showRemove: false,
-        //minFileCount: 3,
+        validateInitialCount: true,
+        overwriteInitial: false,
         allowedFileExtensions: ['png', 'jpg', 'gif'],
     });
 </script>
@@ -35,11 +36,11 @@
     //Hàm kiểm tra form hợp lệ
     function isInvalidForm() {
         var data = [];
-        data[0] = document.getElementById('txtTensanpham').value;      	
-        data[1] = document.getElementById('fuMain').value;    
-        data[2] = document.getElementById('numGiakhoidiem').value;    
-        data[3] = document.getElementById('numBuocgia').value;		
-        data[4] = document.getElementById('numGiamuangay');		
+        data[0] = document.getElementById('txtTensanpham').value;
+        data[1] = document.getElementById('fuMain');
+        data[2] = document.getElementById('numGiakhoidiem').value;
+        data[3] = document.getElementById('numBuocgia').value;
+        data[4] = document.getElementById('numGiamuangay');
         data[5] = document.getElementById('txtFullDes');
         data[6] = document.getElementById('giahan');
         var temp_0 = 1;
@@ -50,13 +51,16 @@
         var temp_5 = 1;
         var temp_6 = 1;
 
+        
+
         if (data[0] === "") {
             temp_0 = 0;
             $('#checkTensanpham').addClass("text-danger");
         }
 
-        if (data[1] === "") {
+        if (data[1].files.length < 3) {
             temp_1 = 0;
+             $('#checkHinhAnh').addClass("text-danger");
         }
 
         if (data[2] === "") {
@@ -120,21 +124,22 @@
                             </select>
                         </div>
                         <div class="col-12 mb-20">
-                            <label>Hình ảnh</label>
+                            <label id="checkHinhAnh">Hình ảnh (* ít nhất 3 ảnh)</label>
                             <input id="fuMain" id="fuMain" name="fuMain" type="file" multiple>
                         </div>
                         <div class="col-4 mb-20">
                             <label id="checkGiakhoidiem">Giá khởi điểm (*)</label>
-                            <input class="mb-0" id="numGiakhoidiem" name="numGiakhoidiem" type="number" min = "0"
+                            <input class="mb-0" id="numGiakhoidiem" name="numGiakhoidiem" type="number" min="0"
                                 placeholder="VND">
                         </div>
                         <div class="col-4 mb-20">
                             <label id="checkBuocgia">Bước giá (*)</label>
-                            <input class="mb-20" id="numBuocgia" name="numBuocGia" type="number" min = "0" placeholder="VND">
+                            <input class="mb-20" id="numBuocgia" name="numBuocGia" type="number" min="0"
+                                placeholder="VND">
                         </div>
                         <div class="col-4 mb-20">
                             <label>Giá mua ngay</label>
-                            <input class="mb-20" id="numGiamuangay" name="numGiamuangay" type="number" min = "0"
+                            <input class="mb-20" id="numGiamuangay" name="numGiamuangay" type="number" min="0"
                                 placeholder="VND">
                         </div>
 

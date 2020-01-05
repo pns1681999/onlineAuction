@@ -38,17 +38,16 @@ router.post('/insertProduct', async (req, res) => {
     let current = moment();
     const storage = multer.diskStorage({
         filename: function (req, file, cb) {
-            cb(null, current.format('YYYYMMDDhhmmss') + '.jpg');
+            cb(null, file.originalname + '-' + current.format('YYYYMMDDhhmmss') + '.jpg');
         },
         destination: function (req, file, cb) {
             cb(null, `./public/images/`);
         },
     });
     const upload = multer({ storage });
-    upload.single('fuMain')(req, res, err => {
+    upload.array('fuMain', 10)(req, res, err => {
         if (err) { }
         res.redirect('/');
-        console.log(req.file, req.body);
         let hethan = moment(current).add(10, 'days');
         let entity = {
             TenSanPham: req.body.txtTensanpham,
@@ -65,8 +64,13 @@ router.post('/insertProduct', async (req, res) => {
             GiaMuaNgay: req.body.numGiamuangay,
             DanhGia: 0,
             SoLuotRaGia: 0,
+            SoHinh: req.files.length,
         };
-        (async (entity, current) => {
+        let listFilename = [];
+        for (let i = 0; i < req.files.length; i++) {
+            listFilename[i] = req.files[i].filename;
+        }
+        (async (entity, current, listFilename) => {
             const result = await productModel.add(entity);
             console.log(current.format('YYYY-MM-DD hh:mm:ss'));
             const newProduct = await productModel.singleWithDatetime(current.format('YYYY-MM-DD hh:mm:ss'));
@@ -74,10 +78,14 @@ router.post('/insertProduct', async (req, res) => {
             fs.mkdir('./public/images/product/' + newProduct[0].IdSanPham, { recursive: true }, (err) => {
                 if (err) throw err;
             });
-            fs.rename('./public/images/' + current.format('YYYYMMDDhhmmss') + '.jpg', './public/images/product/' + newProduct[0].IdSanPham + '/1.jpg', function (err) {
-                if (err) console.log('ERROR: ' + err);
-            });
-        })(entity, current);
+
+            for (let i = 1; i<=listFilename.length;i++) {
+                fs.rename('./public/images/' + listFilename[i-1], './public/images/product/' + newProduct[0].IdSanPham + '/' + i +'.jpg', function (err) {
+                    if (err) console.log('ERROR: ' + err);
+                });
+            }
+            
+        })(entity, current, listFilename);
 
 
     });

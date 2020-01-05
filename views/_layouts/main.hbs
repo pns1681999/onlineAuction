@@ -60,7 +60,7 @@
                         <div class="col-lg-3 col-md-4">
                             <div class="header-top-left">
                                 <ul class="phone-wrap">
-                                    <li><span>Hotline: </span><a href="#">(+84) 969 123 456</a></li>
+                                    <li><span>Hotline: </span><a href="#"><b>(+84) 969 123 456</b></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -81,15 +81,15 @@
                                                 <i class="fa fa-user" aria-hidden="true"></i>
                                                 Profile
                                             </a>
-                                        <div class="dropdown-divider"></div>
+                                            <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="/account/productAutioning">
                                                 <i class="fa fa-legal" aria-hidden="true"></i>
-                                                Đang đấu giá
+                                                Tham gia đấu giá
                                             </a>
-                                        <div class="dropdown-divider"></div>
+                                            <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="/account/productAuctioned">
                                                 <i class="fa fa-check" aria-hidden="true"></i>
-                                                Đã đấu giá
+                                                Đấu giá thành công
                                             </a>
                                             {{#if isSeller}}
                                             <div class="dropdown-divider"></div>
@@ -97,7 +97,7 @@
                                                 <i class="fa fa-mail-reply" aria-hidden="true"></i>
                                                 Yêu cầu đấu giá
                                             </a>
-                                                <div class="dropdown-divider"></div>
+                                            <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="/seller/insertProduct">
                                                 <i class="fa fa-plus" aria-hidden="true"></i>
                                                 Thêm sản phẩm
@@ -105,15 +105,15 @@
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="/seller/productAvailable">
                                                 <i class="fa fa-legal" aria-hidden="true"></i>
-                                                Đang đấu giá
+                                                Sản phẩm còn đấu giá
                                             </a>
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="/seller/productAuctioned">
                                                 <i class="fa fa-check" aria-hidden="true"></i>
-                                                Đã đấu giá
+                                                Sản phẩm đã đấu giá
                                             </a>
                                             {{/if}}
-                                
+
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="javascript: $('#frmLogout').submit();">
                                                 <i class="fa fa-sign-out" aria-hidden="true"></i>
@@ -173,18 +173,19 @@
                                 <button class="li-btn" type="submit"><i class="fa fa-search"></i></button>
                             </form>
                             <!-- Header Middle Searchbox Area End Here -->
+                            {{#if isAuthenticated}}
                             <!-- Begin Header Middle Right Area -->
                             <div class="header-middle-right">
                                 <ul class="hm-menu">
                                     <!-- Begin Header Middle Wishlist Area -->
                                     <li class="hm-wishlist">
                                         <a href="/account/wishlist">
-                                            <span class="cart-item-count wishlist-item-count">0</span>
+                                            {{!-- <span class="cart-item-count wishlist-item-count">0</span> --}}
                                             <i class="fa fa-heart-o"></i>
                                         </a>
                                     </li>
                                     <!-- Header Middle Wishlist Area End Here -->
-                                    <!-- Begin Header Mini Cart Area -->
+                                    {{!-- <!-- Begin Header Mini Cart Area -->
                                     <li class="hm-minicart">
                                         <div class="hm-minicart-trigger">
                                             <span class="item-icon"></span>
@@ -232,10 +233,12 @@
                                                 </a>
                                             </div>
                                         </div>
-                                    </li>
+                                    </li> --}}
                                     <!-- Header Mini Cart Area End Here -->
                                 </ul>
                             </div>
+                            {{/if}}
+
                             <!-- Header Middle Right Area End Here -->
                         </div>
                         <!-- Header Middle Right Area End Here -->

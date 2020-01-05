@@ -26,21 +26,25 @@ router.get('/:id', async (req, res) => {
         userModel.single(rows[0].IdNguoiBan),
         userModel.single(rows[0].IdNguoiThang)
     ]);
+    let listImages = [];
+    for (let i = 0; i< rows[0].SoHinh; i++) listImages[i] = i+1; 
 
     for (let i = rows1.length - 1; i >= 0; i--) {
         if (rows1[i].IdSanPham === rows[0].IdSanPham) rows1.splice(i, 1);
     }
     for (let c of rows1) {
         let nguoithang = await userModel.single(c.IdNguoiThang);
-        
+        if(nguoithang[0]!=null) {
+            
         c.NguoiThang = nguoithang[0];
+        c.NguoiThang.HoVaTen = mask(nguoithang[0].HoVaTen,0,nguoithang[0].HoVaTen.length-5,'*');
         c.NgayDang = moment(c.NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
         c.ThoiHan = moment(c.NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
+        }
     }
     if(nguoithang[0]!=null)
     nguoithang[0].HoVaTen=mask(nguoithang[0].HoVaTen,0,nguoithang[0].HoVaTen.length-5,'*');
-
-    console.log(nguoithang);
+    nguoiban[0].HoVaTen=mask(nguoiban[0].HoVaTen,0,nguoiban[0].HoVaTen.length-5,'*');
     for(let c of bidders){
         c.NgayDauGia=moment(c.NgayDauGia, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY hh:mm");
         c.TenNguoiMua=mask(c.TenNguoiMua,0,c.TenNguoiMua.length-4,'*');
@@ -54,6 +58,7 @@ router.get('/:id', async (req, res) => {
         product: rows[0],
         NguoiBan: nguoiban[0],
         NguoiThang: nguoithang[0],
+        listImages: listImages,
         danhsachdaugia:bidders
     });
 })
