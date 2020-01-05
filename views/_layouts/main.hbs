@@ -88,14 +88,10 @@
                                             </a>
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="/account/productAuctioned">
-                                                <i class="fa fa-check" aria-hidden="true"></i>
+                                                <i class="fa fa-shopping-basket" aria-hidden="true"></i>
                                                 Đấu giá thành công
                                             </a>
-                                        <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="/account/uptoseller">
-                                                <i class="fa fa-rocket" aria-hidden="true"></i>
-                                                Xin cấp phép thành seller
-                                            </a>
+                                            
                                             {{#if isSeller}}
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="/seller/request">
@@ -109,7 +105,7 @@
                                             </a>
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="/seller/productAvailable">
-                                                <i class="fa fa-legal" aria-hidden="true"></i>
+                                                <i class="fa fa-hourglass-half" aria-hidden="true"></i>
                                                 Sản phẩm còn đấu giá
                                             </a>
                                             <div class="dropdown-divider"></div>
@@ -117,7 +113,14 @@
                                                 <i class="fa fa-check" aria-hidden="true"></i>
                                                 Sản phẩm đã đấu giá
                                             </a>
+                                            {{else}}
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="/account/uptoseller">
+                                                <i class="fa fa-rocket" aria-hidden="true"></i>
+                                                Xin cấp phép thành seller
+                                            </a>
                                             {{/if}}
+
 
                                             <div class="dropdown-divider"></div>
                                             <a class="dropdown-item" href="javascript: $('#frmLogout').submit();">
