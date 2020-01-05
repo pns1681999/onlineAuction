@@ -29,15 +29,24 @@ router.post('/logout',(req,res)=>{
 
 router.get('/profile',async(req,res)=>{
     if(req.session.isAuthenticated==false){
-        return res.redirect('/account/login?retUrl=/account/profile');
+        return res.redirect('/account/login?retUrl=/admin/profile');
     }
-    const profile=await userModel.singleByUsername(req.session.authUser.TenDangNhap);
-    delete profile.MatKhau;
     
-    profile.NgaySinh = moment(profile.NgaySinh, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
-    res.render('vwAccount/profile',{
-        infor:profile
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+
+    const rows = await userModel.single(req.session.authUser.IdNguoiDung);
+    res.render('vwAdmin/user/update',  {
+        nguoidung: rows[0],
+        layout: 'admin_layout.hbs'
     });
+    // const profile=await userModel.singleByUsername(req.session.authUser.TenDangNhap);
+    // delete profile.MatKhau;
+    
+    // profile.NgaySinh = moment(profile.NgaySinh, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
+    // res.render('vwAccount/profile',{
+    //     infor:profile
+    // });
 
 })
 
