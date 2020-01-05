@@ -10,8 +10,7 @@ const restrict = require('../middlewares/auth.mdw');
 const nodemailer = require('nodemailer');
 const router = express.Router();
 const aution = require('../models/aution.model');
-
-
+const uptoseller=require('../models/uptoseller.model');
 let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -228,7 +227,20 @@ router.post("/deal", async (req, res) => {
                 Gia: gia,
                 NgayDauGia: moment().format("YYYY-MM-DD hh:mm:ss")
             }
-            aution.add(entity);
+            await aution.add(entity);
+
+            const maxaution=await aution.maxaution(+req.body.txtId);
+            if(maxaution[0]!=null){
+            maxaution[0].SoLuotRaGia=maxaution[0].SoLuotRaGia+1;
+            const l= await productModel.patch(maxaution[0]);
+            entity2={
+                GiaHienTai:maxaution[0].GiaHienTai,
+                IdSanPham:req.body.txtId
+            }
+            await cart.patch(entity2);
+        }
+            
+
             confirm = 1;
             let mail = await transporter.sendMail({
                 from: "webapponlineauction@gmail.com",
@@ -264,7 +276,18 @@ router.post("/deal", async (req, res) => {
             Gia: gia,
             NgayDauGia: moment().format("YYYY-MM-DD hh:mm:ss")
         }
-        aution.add(entity);
+        await aution.add(entity);
+        const maxaution=await aution.maxaution(+req.body.txtId);
+            if(maxaution[0]!=null){
+            maxaution[0].SoLuotRaGia=maxaution[0].SoLuotRaGia+1;
+            const l= await productModel.patch(maxaution[0]);
+            entity2={
+                GiaHienTai:maxaution[0].GiaHienTai,
+                IdSanPham:req.body.txtId
+            }
+            await cart.patch(entity2);
+        }
+            
         confirm = 1;
         let mail = await transporter.sendMail({
             from: "webapponlineauction@gmail.com",
@@ -274,6 +297,10 @@ router.post("/deal", async (req, res) => {
             html: "Bạn được ra giá <b>thành công</b> sản phẩm <b>" + sp[0].TenSanPham + "</b> với giá <b>" + gia + "</b>." // html body
         });
     }
+
+    
+
+
     const url = req.query.retUrl;
 
     res.render('vwConfirm/confirm', {
@@ -299,6 +326,8 @@ router.get("/productAutioning",restrict,async(req,res)=>{
          aution.pageAutionByBidder(bidderId, offset)
     ]);
     
+    
+    
 
     let nPages = Math.floor(total / limit);
     if (total % limit > 0) nPages++;
@@ -312,6 +341,13 @@ router.get("/productAutioning",restrict,async(req,res)=>{
     }
     for (c of rows){
         c.NgayHetHan = moment(rows[0].NgayHetHan, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
+        if(c.IdNguoiThang !=bidderId)
+        c.config=0;
+        else
+        c.config=1
+
+
+
 
     }
    
@@ -327,4 +363,31 @@ router.get("/productAutioning",restrict,async(req,res)=>{
 
 })
 
+
+router.get("/uptoseller", async (req, res) => {
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login');
+    }
+    entity={
+        IdNguoiDung:res.locals.authUser.IdNguoiDung
+
+    }
+    uptoseller.add(entity);
+    const user=await userModel.single(+res.locals.authUser.IdNguoiDung);
+    confirm=3;
+    if(+user[0].LoaiNguoiDung!=1)
+        confirm=-1
+    res.render('vwConfirm/confirm', {
+        isConfirm: confirm,
+        url: '/'
+    });
+})
+
+
+
+router.get("/delwishlist/:id", async (req, res) => {
+    cart.delProduct(+req.params.id,+res.locals.authUser.IdNguoiDung);
+    res.redirect('/account/wishlist');
+
+})
 module.exports = router;

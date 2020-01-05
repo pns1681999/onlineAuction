@@ -29,54 +29,31 @@ router.post('/logout',(req,res)=>{
 
 router.get('/profile',async(req,res)=>{
     if(req.session.isAuthenticated==false){
-        return res.redirect('/account/login?retUrl=/account/profile');
+        return res.redirect('/account/login?retUrl=/admin/profile');
     }
-    const profile=await userModel.singleByUsername(req.session.authUser.TenDangNhap);
-    delete profile.MatKhau;
     
-    profile.NgaySinh = moment(profile.NgaySinh, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
-    res.render('vwAccount/profile',{
-        infor:profile
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+
+    const rows = await userModel.single(req.session.authUser.IdNguoiDung);
+    res.render('vwAdmin/user/update',  {
+        nguoidung: rows[0],
+        layout: 'admin_layout.hbs'
     });
+    // const profile=await userModel.singleByUsername(req.session.authUser.TenDangNhap);
+    // delete profile.MatKhau;
+    
+    // profile.NgaySinh = moment(profile.NgaySinh, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
+    // res.render('vwAccount/profile',{
+    //     infor:profile
+    // });
 
 })
-
-// router.post('/account/del',async(req,res)=>{
-
-// })
-
-// router.post('/patch',async(req,res)=>{
-//     const dob = moment(req.body.txtNgaySinh, 'DD/MM/YYYY').format('YYYY-MM-DD');
-//     const hash = bcrypt.hashSync(req.body.txtnewpass, 10);
-
-//     const entity={
-//         IdNguoiDung:req.body.txtIdNguoiDung,
-//         HoVaTen: req.body.txtHoVaTen,
-//         Email: req.body.txtEmail,
-//         NgaySinh: dob,
-//         MatKhau:hash
-
-//     }
-//     if(req.body.txtnewpass==='')
-//     {
-//         delete entity.MatKhau;
-//     }
-//     const user= await userModel.singleByEmail(req.body.txtEmail);
-    
-//     const rs=bcrypt.compareSync(req.body.txtpass,user.MatKhau);
-//     if(rs===true)
-//     {
-
-//     const result=await userModel.patch(entity);
-//     }
-//     res.redirect('/account/profile');
-// })
-
 
 ///////////////////CATEGORY
 router.get('/category/list', async (req, res) =>{
     if(req.session.isAuthenticated==false){
-        return res.redirect('/account/login?retUrl=/admin/home');
+        return res.redirect('/account/login?retUrl=/admin/category/list');
     }
     
     if (req.session.authUser.LoaiNguoiDung!=0)
@@ -112,7 +89,7 @@ router.get('/category/detail/:id', async (req, res) => {
 
 router.get('/category/add', async (req, res) =>{
     if(req.session.isAuthenticated==false){
-        return res.redirect('/account/login?retUrl=/admin/home');
+        return res.redirect('/account/login?retUrl=/admin/category/add');
     }
     
     if (req.session.authUser.LoaiNguoiDung!=0)
@@ -204,7 +181,7 @@ router.get('/category/delete/:id', async (req, res) => {
 ///////////////////USER
 router.get('/user/list', async (req, res) =>{
     if(req.session.isAuthenticated==false){
-        return res.redirect('/account/login?retUrl=/admin/home');
+        return res.redirect('/account/login?retUrl=/admin/user/list');
     }
     
     if (req.session.authUser.LoaiNguoiDung!=0)
@@ -221,7 +198,7 @@ router.get('/user/list', async (req, res) =>{
 
 router.get('/user/add', async (req, res) =>{
     if(req.session.isAuthenticated==false){
-        return res.redirect('/account/login?retUrl=/admin/home');
+        return res.redirect('/account/login?retUrl=/admin/user/add');
     }
     
     if (req.session.authUser.LoaiNguoiDung!=0)
@@ -259,4 +236,173 @@ router.post('/user/add', async (req, res) => {
       });
 })
 
+router.get('/user/detail/:id', async (req, res) => {
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/home');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+
+    const rows = await userModel.single(req.params.id);
+    res.render('vwAdmin/user/detail',  {
+        nguoidung: rows[0],
+        isAdmin: rows[0].LoaiNguoiDung==0,
+        isBuyer: rows[0].LoaiNguoiDung==1,
+        isSeller: rows[0].LoaiNguoiDung==2,
+        layout: 'admin_layout.hbs'
+    });
+})
+
+router.get('/user/upgrade', async (req, res) =>{
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/user/upgrade');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+    
+    const rows = await userModel.buyer();
+    
+    res.render('vwAdmin/user/upgrade',  {
+        nguoidung: rows,
+        empty: rows.length === 0,
+        layout: 'admin_layout.hbs'
+      });
+})
+
+router.get('/user/upgrade/:id', async (req, res) => {
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/home');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+
+    let entity = {
+        IdNguoiDung: req.params.id,
+        LoaiNguoiDung: 2,
+    }
+
+    const result = await userModel.patch(entity);
+    
+    const rows = await userModel.buyer();
+    
+    res.render('vwAdmin/user/upgrade',  {
+        nguoidung: rows,
+        empty: rows.length === 0,
+        layout: 'admin_layout.hbs'
+      });
+})
+
+router.get('/user/degrade', async (req, res) =>{
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/user/degrade');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+    
+    const rows = await userModel.seller();
+    
+    res.render('vwAdmin/user/degrade',  {
+        nguoidung: rows,
+        empty: rows.length === 0,
+        layout: 'admin_layout.hbs'
+      });
+})
+
+router.get('/user/degrade/:id', async (req, res) => {
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/home');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+
+    let entity = {
+        IdNguoiDung: req.params.id,
+        LoaiNguoiDung: 1,
+    }
+
+    const result = await userModel.patch(entity);
+    
+    const rows = await userModel.seller();
+    
+    res.render('vwAdmin/user/degrade',  {
+        nguoidung: rows,
+        empty: rows.length === 0,
+        layout: 'admin_layout.hbs'
+      });
+})
+
+router.get('/user/update/:id', async (req, res) => {
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/home');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+
+    const rows = await userModel.single(req.params.id);
+    res.render('vwAdmin/user/update',  {
+        nguoidung: rows[0],
+        layout: 'admin_layout.hbs'
+    });
+})
+
+router.post('/user/update/:id', async (req, res) => {
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/home');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+
+    const N = 10;
+    const hash = bcrypt.hashSync(req.body.MatKhau, N);
+    const dob = moment(req.body.NgaySinh, 'DD/MM/YYYY').format('YYYY-MM-DD');
+
+    let entity = {
+        IdNguoiDung: req.body.IdNguoiDung,
+        MatKhau: hash,
+        HoVaTen: req.body.HoVaTen,
+        Email: req.body.Email,
+        NgaySinh: dob,
+        LoaiNguoiDung: req.body.LoaiNguoiDung,
+        DiemCong: req.body.DiemCong,
+        DiemTru: req.body.DiemTru,
+    }
+    
+    const result = await userModel.patch(entity);
+
+    
+    const rows = await userModel.single(req.params.id);
+    res.render('vwAdmin/user/detail',  {
+        nguoidung: rows[0],
+        isAdmin: rows[0].LoaiNguoiDung==0,
+        isBuyer: rows[0].LoaiNguoiDung==1,
+        isSeller: rows[0].LoaiNguoiDung==2,
+        layout: 'admin_layout.hbs'
+    });
+})
+
+router.get('/user/delete/:id', async (req, res) => {
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/home');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+        
+    const result = await userModel.del(req.params.id);
+
+    const rows = await userModel.all();
+    
+    res.render('vwAdmin/user/list',  {
+        nguoidung: rows,
+        empty: rows.length === 0,
+        layout: 'admin_layout.hbs'
+    });
+})
 module.exports = router;

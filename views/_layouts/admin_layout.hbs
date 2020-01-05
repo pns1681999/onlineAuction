@@ -48,48 +48,7 @@
           <div class="navbar-custom-menu">
             <form action="/account/logout" method="POST" id="frmLogout"></form>
             <ul class="nav navbar-nav">
-              <!-- Notifications: style can be found in dropdown.less -->
-              <li class="dropdown notifications-menu">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <i class="fa fa-bell-o"></i>
-                  <span class="label label-warning">10</span>
-                </a>
-                <ul class="dropdown-menu">
-                  <li class="header">You have 10 notifications</li>
-                  <li>
-                    <!-- inner menu: contains the actual data -->
-                    <ul class="menu">
-                      <li>
-                        <a href="#">
-                          <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the page and may cause design problems
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <i class="fa fa-users text-red"></i> 5 new members joined
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <i class="fa fa-shopping-cart text-green"></i> 25 sales made
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <i class="fa fa-user text-red"></i> You changed your username
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="footer"><a href="#">View all</a></li>
-                </ul>
-              </li>
-              </li>
+              
               <!-- User Account: style can be found in dropdown.less -->
               {{#if isAdmin}}
                   <li>
@@ -98,7 +57,7 @@
                         Hi <b>{{authUser.HoVaTen}}</b>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/account/profile">
+                        <a class="dropdown-item" href="/admin/profile">
                             <i class="fa fa-user" aria-hidden="true"></i>
                             Profile
                         </a>
@@ -138,10 +97,7 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="/admin/product/list"><i class="fa fa-circle-o"></i> Xem danh sách sản phẩm</a></li>
-                <li><a href="/admin/product/detail"><i class="fa fa-circle-o"></i>Xem chi tiết</a></li>
                 <li><a href="/admin/product/add"><i class="fa fa-circle-o"></i>Thêm sản phẩm</a></li>
-                <li><a href="/admin/product/delete"><i class="fa fa-circle-o"></i>Xóa sản phẩm</a></li>
-                <li><a href="/admin/product/update"><i class="fa fa-circle-o"></i>Cập nhật sản phẩm</a></li>
               </ul>
             </li>
             <li class="active treeview">
@@ -150,11 +106,9 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="/admin/user/list"><i class="fa fa-circle-o"></i> Xem danh sách người dùng</a></li>
-                <li><a href="/admin/user/detail"><i class="fa fa-circle-o"></i>Xem chi tiết</a></li>
                 <li><a href="/admin/user/add"><i class="fa fa-circle-o"></i>Thêm người dùng</a></li>
-                <li><a href="/admin/user/delete"><i class="fa fa-circle-o"></i>Xóa người dùng</a></li>
-                <li><a href="/admin/user/update"><i class="fa fa-circle-o"></i>Cập nhật thông tin người dùng</a></li>
-                <li><a href="/admin/user/upgrade"><i class="fa fa-circle-o"></i>Nâng cấp người dùng</a></li>
+                <li><a href="/admin/user/upgrade"><i class="fa fa-circle-o"></i>Nâng cấp người mua</a></li>
+                <li><a href="/admin/user/degrade"><i class="fa fa-circle-o"></i>Hạ cấp người bán</a></li>
               </ul>
             </li>
         </section>
@@ -376,7 +330,6 @@
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
     <script>
         $('#NgaySinh').datetimepicker({
-            // format: 'd/m/Y H:i'
             format: 'd/m/Y',
             timepicker: false,
             mask: true,

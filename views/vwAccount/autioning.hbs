@@ -1,29 +1,48 @@
-<div class="wishlist-area pt-60 pb-60">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <form action="#">
-                    <div class="table-content table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th class="cart-product-id">Id Sản phẩm</th>
-                                    <th class="cart-product-name">Tên Sản Phẩm</th>
-                                    <th> Ngày hết hạn</th>
-                                    <th class="li-product-add-cart">Giá hiện tại</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {{#each product}}
-                                <tr>
-                                    <td>{{IdSanPham}}</td>
-                                    <td>{{TenSanPham}}</td>
-                                    <td>{{NgayHetHan}}</td>
-                                    <td>{{format GiaHienTai}}</td>
-                                </tr>
-                                {{/each}}
-                            </tbody>
-                        </table>
+
+
+   
+           
+            <div class="wishlist-area pt-60 pb-60">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12">
+                            <form action="#">
+                                <div class="table-content table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="cart-product-id">ProducId</th>
+                                                <th class="cart-product-name">ProductName</th>
+                                                <th> ngayhethan</th>
+                                                <th class="li-product-add-cart">gia hien tai</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#each product}}
+                                            
+                                                {{#if config }}
+                                                <tr class="table-danger">
+                                                <td>{{IdSanPham}}</td>
+                                                <td>{{TenSanPham}}</td>
+                                                <td>{{NgayHetHan}}</td>
+                                                <td>{{format GiaHienTai}}</td>
+                                                </tr>
+                                                {{else}}
+                                                <tr >
+                                                <td>{{IdSanPham}}</td>
+                                                <td>{{TenSanPham}}</td>
+                                                <td>{{NgayHetHan}}</td>
+                                                <td>{{format GiaHienTai}}</td>
+                                                </tr>
+                                                {{/if}}
+                                                
+                                            
+                                            {{/each}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </form>
             </div>
