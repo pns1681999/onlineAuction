@@ -590,17 +590,12 @@ router.post('/product/update/:id', async (req, res) => {
     if (req.session.authUser.LoaiNguoiDung!=0)
         return res.render('vwError/permission');
 
-    const dob_1 = moment(req.body.NgayDang, 'MM/DD/YYYY').format('YYYY-MM-DD');
-    const dob_2 = moment(req.body.NgayHetHan, 'MM/DD/YYYY').format('YYYY-MM-DD');
-
     let entity = {
         IdSanPham: req.body.IdSanPham,
         TenSanPham: req.body.TenSanPham,
         LoaiSanPham: req.body.LoaiSanPham,
         ChiTiet: req.body.ChiTiet,
         GiaKhoiDiem: req.body.GiaKhoiDiem,
-        NgayDang: dob_1,
-        NgayHetHan: dob_2,
         GiaBanToiThieu: req.body.GiaBanToiThieu,
         GiaHienTai: req.body.GiaHienTai,
         GiaMuaNgay: req.body.GiaMuaNgay,
@@ -620,6 +615,9 @@ router.post('/product/update/:id', async (req, res) => {
         userModel.single(rows[0].IdNguoiThang)
     ]);
 
+    let listImages = [];
+    for (let i = 0; i< rows[0].SoHinh; i++) listImages[i] = i+1;
+
     for (let i = rows1.length - 1; i >= 0; i--) {
         if (rows1[i].IdSanPham === rows[0].IdSanPham) rows1.splice(i, 1);
     }
@@ -637,13 +635,13 @@ router.post('/product/update/:id', async (req, res) => {
     rows[0].NgayHetHan = moment(rows[0].NgayHetHan, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
     rows[0].ThoiHan = moment(rows[0].NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
 
-    danhmuc = await categoryModel.single(rows[0].LoaiSanPham
-        );
+    danhmuc = await categoryModel.single(rows[0].LoaiSanPham);
     res.render('vwAdmin/product/detail', {
         product: rows[0],
         LoaiSanPham: danhmuc[0],
         NguoiBan: nguoiban[0],
         NguoiThang: nguoithang[0],
+        listImages: listImages,
         layout: 'admin_layout.hbs'
     });
 })

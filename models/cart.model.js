@@ -5,6 +5,7 @@ module.exports={
     single:id=> db.load(`select * from wishlist where IdNguoiDung=${id} and NgayHetHan > SYSDATE() `),
     add: entity=> db.add("wishlist",entity),
     del:id=>db.load("wishlist",{IdSanPham:id}),
+    cartinf: (id, id2) => db.load(`select a.IdSanPham,a.TenSanPham,a.NgayHetHan,b.IdNguoiDung,a.GiaHienTai from sanpham a,nguoidung b where a.IdSanPham = ${id} and b.IdNguoiDung=${id2}`),
     patch:entity=>{const condition = { IdSanPham: entity.IdSanPham };
     delete entity.IdSanPham;
     return db.patch('wishlist', entity, condition);},
