@@ -10,26 +10,22 @@
                                     <table class="table">
                                         <thead>
                                             <tr>
-                                                <th class="li-product-remove">remove</th>
                                                 <th class="cart-product-id">ProducId</th>
                                                 <th class="cart-product-name">ProductName</th>
                                                 <th> ngayhethan</th>
                                                 <th> gia hien tai</th>
-                                                <th class="li-product-add-cart">add to cart</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {{#each product}}
                                             <tr>
                                                 
-                                                <td class="li-product-remove"><a href="account/delwishlist/{{IdSanPham}}"><i class="fa fa-times"></i></a></td>
                                                 <input id="txtId" name="txtId" style="display:none;" value={{IdSanPham}}></input>
                                                 <td>{{IdSanPham}}</td>
-                                                <td>{{TenSanPham}}</td>
+                                                <td><a href="/products/{{IdSanPham}}">{{TenSanPham}}</a></td>
                                                 <td>{{NgayHetHan}}</td>
                                                 <td>{{GiaHienTai}}</td>
-                                                <td class="li-product-add-cart"><a href="#">add to cart</a></td>
-                                            </tr>
+\                                            </tr>
                                             {{/each}}
                                         </tbody>
                                     </table>
