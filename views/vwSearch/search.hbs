@@ -31,6 +31,9 @@
                                     {{#each this.products}}
                                     <div class="col-lg-3 col-md-4 col-sm-6 mt-40">
                                         <!-- single-product-wrap start -->
+                                         <form method="POST">
+                            <input id="txtId" name="txtId" style="display:none;" value={{IdSanPham}}></input>
+                            
                                         <div class="single-product-wrap">
                                             <div class="product-image">
                                                 <a href="/products/{{IdSanPham}}">
@@ -84,6 +87,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        </form>
                                         <!-- single-product-wrap end -->
                                     </div>
                                     {{/each}}

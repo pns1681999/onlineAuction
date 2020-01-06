@@ -50,13 +50,20 @@ router.get('/:id', async (req, res) => {
 
     rows[0].NgayDang = moment(rows[0].NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
     rows[0].ThoiHan = moment(rows[0].NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
+    let muangay=false;
+    if(rows[0].GiaMuaNgay!=0)
+    {
+        muangay=true;
+    }
+
     res.render('vwProducts/singleProduct', {
         SanPhamLienQuan: rows1,
         product: rows[0],
         NguoiBan: nguoiban[0],
         NguoiThang: nguoithang[0],
         listImages: listImages,
-        danhsachdaugia:bidders
+        danhsachdaugia:bidders,
+        cogiamuangay:muangay
     });
 })
 

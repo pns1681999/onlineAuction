@@ -72,12 +72,14 @@
                 <div class="product-details-view-content pt-60">
                     <div class="product-info">
                         <h2>{{product.TenSanPham}}</h2>
+                        {{#if cogiamuangay}}
                         <form method="POST">
                         <div class="product-additional-info ">
                                 <button class="add-to-cart quantity" type="submit" style="background-color: crimson;color:rgb(15, 14, 14); font-weight: bold; "
                                     formaction="/account/buynow/id={{product.IdSanPham}}/gia={{product.GiaMuaNgay}}?retUrl=/products/{{product.IdSanPham}}">Mua ngay với {{ format product.GiaMuaNgay}}</button>    
                         </div>
                         </form>
+                        {{/if}}
                         <div class="rating-box pt-20">
                             <ul class="rating rating-with-review-item">
                                 <h5 class="manufacturer">
@@ -298,6 +300,10 @@
                         {{#each SanPhamLienQuan}}
                         <div class="col-lg-12">
                             <!-- single-product-wrap start -->
+                            <form method="POST">
+                            <input id="txtName" name="txtName" style="display:none;" value={{../authUser.IdNguoiDung}}></input>
+                            <input id="txtId" name="txtId" style="display:none;" value={{IdSanPham}}></input>
+                            
                             <div class="single-product-wrap">
                                 <div class="product-image">
                                     <a href="/products/{{IdSanPham}}">
@@ -344,6 +350,7 @@
                                     </div>
                                 </div>
                             </div>
+                            </form>
                             <!-- single-product-wrap end -->
                         </div>
                         {{/each}}
