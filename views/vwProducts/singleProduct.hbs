@@ -72,6 +72,12 @@
                 <div class="product-details-view-content pt-60">
                     <div class="product-info">
                         <h2>{{product.TenSanPham}}</h2>
+                        <form method="POST">
+                        <div class="product-additional-info ">
+                                <button class="add-to-cart quantity" type="submit" style="background-color: crimson;color:rgb(15, 14, 14); font-weight: bold; "
+                                    formaction="/account/buynow/id={{product.IdSanPham}}/gia={{product.GiaMuaNgay}}?retUrl=/products/{{product.IdSanPham}}">Mua ngay với {{ format product.GiaMuaNgay}}</button>    
+                        </div>
+                        </form>
                         <div class="rating-box pt-20">
                             <ul class="rating rating-with-review-item">
                                 <h5 class="manufacturer">
@@ -137,7 +143,7 @@
                                 <input type="number" name="txtSoBuocGia" id="fillmoney" value="1" min="1">
                                 <button class="add-to-cart" type="submit"
                                     formaction="/account/deal?retUrl=/products/{{product.IdSanPham}}">Ra giá</button>
-                                {{else}}
+                                 {{else}}
                                 <input type="number" name="txtSoBuocGia" id="fillmoney" value="1" min="1">
                                 <button class="add-to-cart"
                                     formaction="/account/login?retUrl=/products/{{product.IdSanPham}}">Ra giá</button>
@@ -145,7 +151,7 @@
 
                                 {{/if }}
                                 {{/if}}
-
+                                
                             </form>
                         </div>
                         <div class="product-additional-info pt-25">

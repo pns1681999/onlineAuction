@@ -5,62 +5,21 @@
                 <!-- Product Details Left -->
                 <div class="product-details-left">
                     <div class="product-details-images slider-navigation-1">
+                        {{#each listImages}}
                         <div class="lg-image">
-                            <a class="popup-img venobox vbox-item" href="/images/product/{{product.IdSanPham}}/1.jpg"
-                                data-gall="myGallery">
-                                <img src="/images/product/{{product.IdSanPham}}/1.jpg" alt="product image">
+                            <a class="popup-img venobox vbox-item"
+                                href="/images/product/{{../product.IdSanPham}}/{{this}}.jpg" data-gall="myGallery">
+                                <img src="/images/product/{{../product.IdSanPham}}/{{this}}.jpg" alt="product image">
                             </a>
                         </div>
-                        <div class="lg-image">
-                            <a class="popup-img venobox vbox-item" href="/images/product/{{product.IdSanPham}}/1.jpg"
-                                data-gall="myGallery">
-                                <img src="/images/product/{{product.IdSanPham}}/1.jpg" alt="product image">
-                            </a>
-                        </div>
-                        <div class="lg-image">
-                            <a class="popup-img venobox vbox-item" href="/images/product/{{product.IdSanPham}}/1.jpg"
-                                data-gall="myGallery">
-                                <img src="/images/product/{{product.IdSanPham}}/1.jpg" alt="product image">
-                            </a>
-                        </div>
-                        <div class="lg-image">
-                            <a class="popup-img venobox vbox-item" href="/images/product/{{product.IdSanPham}}/1.jpg"
-                                data-gall="myGallery">
-                                <img src="/images/product/{{product.IdSanPham}}/1.jpg" alt="product image">
-                            </a>
-                        </div>
-                        <div class="lg-image">
-                            <a class="popup-img venobox vbox-item" href="/images/product/{{product.IdSanPham}}/1.jpg"
-                                data-gall="myGallery">
-                                <img src="/images/product/{{product.IdSanPham}}/1.jpg" alt="product image">
-                            </a>
-                        </div>
-                        <div class="lg-image">
-                            <a class="popup-img venobox vbox-item" href="/images/product/{{product.IdSanPham}}/1.jpg"
-                                data-gall="myGallery">
-                                <img src="/images/product/{{product.IdSanPham}}/1.jpg" alt="product image">
-                            </a>
-                        </div>
+                        {{/each}}
                     </div>
                     <div class="product-details-thumbs slider-thumbs-1">
-                        <div class="sm-image"><img src="/images/product/{{product.IdSanPham}}/1.jpg"
+                        {{#each listImages}}
+                        <div class="sm-image"><img src="/images/product/{{../product.IdSanPham}}/{{this}}.jpg"
                                 alt="product image thumb">
                         </div>
-                        <div class="sm-image"><img src="/images/product/{{product.IdSanPham}}/1.jpg"
-                                alt="product image thumb">
-                        </div>
-                        <div class="sm-image"><img src="/images/product/{{product.IdSanPham}}/1.jpg"
-                                alt="product image thumb">
-                        </div>
-                        <div class="sm-image"><img src="/images/product/{{product.IdSanPham}}/1.jpg"
-                                alt="product image thumb">
-                        </div>
-                        <div class="sm-image"><img src="/images/product/{{product.IdSanPham}}/1.jpg"
-                                alt="product image thumb">
-                        </div>
-                        <div class="sm-image"><img src="/images/product/{{product.IdSanPham}}/1.jpg"
-                                alt="product image thumb">
-                        </div>
+                        {{/each}}
                     </div>
                 </div>
                 <!--// Product Details Left -->
@@ -82,10 +41,6 @@
                         <div class="form-group">
                             <label>Loại sản phẩm</label>
                             <a class="form-control">{{this.LoaiSanPham.TenDanhMuc}}</a>
-                        </div>
-                        <div class="form-group">
-                            <label>Chi tiết</label>
-                            <a class="form-control">{{this.product.ChiTiet}}</a>
                         </div>
                         <div class="form-group">
                             <label>Giá khởi điểm</label>
@@ -118,10 +73,6 @@
                         <div class="form-group">
                             <label>Giá mua ngay</label>
                             <a class="form-control">{{this.product.GiaMuaNgay}}</a>
-                        </div>
-                        <div class="form-group">
-                            <label>Ngày đăng</label>
-                            <a class="form-control">{{this.product.NgayDang}}</a>
                         </div>
                         <div class="form-group">
                             <label>Số lượt ra giá</label>

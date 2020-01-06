@@ -10,8 +10,8 @@ module.exports={
     delete entity.IdSanPham;
     return db.patch('wishlist', entity, condition);},
     countWatchedByBidder: async bidderId => {
-        const rows = await db.load(`SELECT count(*) as total FROM ( SELECT * FROM wishlist WHERE IdNguoiDung = ${bidderId} and NgayHetHan > SYSDATE() )c`)
+        const rows = await db.load(`SELECT count(*) as total FROM ( SELECT distinct a.IdSanPham,a.TenSanPham,a.NgayHetHan,a.GiaHienTai FROM wishlist a, sanpham b WHERE a.IdNguoiDung = ${bidderId} and a.NgayHetHan > SYSDATE() and a.IdSanPham=b.IdSanPham and b.TinhTrang=0 )c`)
         return rows[0].total;
       },
-    pageWatchedByBidder: (bidderId, offset) => db.load(`SELECT * FROM (SELECT * FROM wishlist WHERE IdNguoiDung = ${bidderId} and NgayHetHan > SYSDATE()) c limit ${config.paginate.limit} OFFSET ${offset}`),
+    pageWatchedByBidder: (bidderId, offset) => db.load(`SELECT * FROM (SELECT  distinct a.IdSanPham,a.TenSanPham,a.NgayHetHan,a.GiaHienTai FROM wishlist a,sanpham b WHERE a.IdNguoiDung = ${bidderId} and a.NgayHetHan > SYSDATE() and a.IdSanPham=b.IdSanPham and b.TinhTrang=0) c limit ${config.paginate.limit} OFFSET ${offset}`),
 }
