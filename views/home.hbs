@@ -139,7 +139,7 @@
                             <!-- single-product-wrap start -->
                             <form method="POST">
                             <input id="txtName" name="txtName" style="display:none;" value={{../authUser.IdNguoiDung}}></input>
-                            <input id="txtId" name="txtId" style="display:none;" value={{IdSanPham}}></input>
+                            {{!-- <input id="txtId" name="txtId" style="display:none;" value={{IdSanPham}}></input> --}}
                             <div class="single-product-wrap">
                                 <div class="product-image">
                                     <a href="/products/{{IdSanPham}}">
@@ -161,7 +161,7 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                        <h4><a class="product_name" href="/products/{{IdSanPham}}"><span name="txtIdSanPham">#{{IdSanPham}}</span> {{TenSanPham}} </a></h4>
+                                        <h4><a class="product_name" href="/products/{{IdSanPham}}"> {{TenSanPham}} </a></h4>
                                         <div><span class="start-date"><span class="fa fa-calendar"></span>
                                                 {{NgayDang}}</span></div>
                                         <div class="price-box">

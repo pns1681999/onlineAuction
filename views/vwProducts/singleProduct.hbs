@@ -105,12 +105,13 @@
                                 <li><i class="fa fa-thumbs-up"></i> {{NguoiThang.DiemCong}}</li>
                                 <li><i class="fa fa-thumbs-down"></i>{{NguoiThang.DiemTru}}</li>
                                 {{#if (eq NguoiBan.IdNguoiDung authUser.IdNguoiDung)}}
-                                <form
+                                     <form
                                     action="/seller/block/bidder={{NguoiThang.IdNguoiDung}}/product={{product.IdSanPham}}"
                                     method="POST" id="frmblock"></form>
                                 <li><a href="javascript: $('#frmblock').submit();"><i
                                             class="fa fa-remove text-danger"></i> <span class="text-danger"><b> Cấm ra
                                                 giá</b></span></a></li>
+                               
                                 {{/if}}
                             </ul>
 

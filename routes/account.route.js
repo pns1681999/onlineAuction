@@ -10,7 +10,7 @@ const restrict = require('../middlewares/auth.mdw');
 const nodemailer = require('nodemailer');
 const router = express.Router();
 const aution = require('../models/aution.model');
-const uptoseller=require('../models/uptoseller.model');
+const uptoseller = require('../models/uptoseller.model');
 let transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -26,7 +26,7 @@ let transporter = nodemailer.createTransport({
 })
 
 router.get('/register', (req, res) => {
-    res.render('vwAccount/register', { layout: false});
+    res.render('vwAccount/register', { layout: false });
 })
 
 router.post('/register', async (req, res) => {
@@ -155,8 +155,8 @@ router.post('/patch', async (req, res) => {
 
 
 
-router.get("/wishlist",restrict,async(req,res)=>{
-    if(req.session.isAuthenticated==false){
+router.get("/wishlist", restrict, async (req, res) => {
+    if (req.session.isAuthenticated == false) {
         return res.redirect('/account/login?retUrl=/account/wishlist');
     }
 
@@ -166,11 +166,11 @@ router.get("/wishlist",restrict,async(req,res)=>{
     if (page < 1) page = 1;
     const offset = (page - 1) * config.paginate.limit;
 
-    let [total,rows] = await Promise.all([
-         cart.countWatchedByBidder(bidderId),
-         cart.pageWatchedByBidder(bidderId, offset)
+    let [total, rows] = await Promise.all([
+        cart.countWatchedByBidder(bidderId),
+        cart.pageWatchedByBidder(bidderId, offset)
     ]);
-    
+
 
     let nPages = Math.floor(total / limit);
     if (total % limit > 0) nPages++;
@@ -178,18 +178,18 @@ router.get("/wishlist",restrict,async(req,res)=>{
     let page_numbers = [];
     for (i = 1; i <= nPages; i++) {
         page_numbers.push({
-        value: i,
-        isCurrentPage: i === +page
+            value: i,
+            isCurrentPage: i === +page
         })
     }
-    for (c of rows){
+    for (c of rows) {
         c.NgayHetHan = moment(rows[0].NgayHetHan, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
 
     }
-   
-    
-    res.render("vwAccount/wishlist",{
-        product:rows,
+
+
+    res.render("vwAccount/wishlist", {
+        product: rows,
         num_of_page: nPages,
         isPage: +page,
         empty: rows.length === 0,
@@ -220,26 +220,26 @@ router.post("/deal", async (req, res) => {
         if ((user[0].DiemCong * 100) / (user[0].DiemCong + user[0].DiemTru) >= 80) {
             //cập nhật thẳng lên db
             let gia = +req.body.txtSoBuocGia * sp[0].BuocGia + sp[0].GiaHienTai,
-            entity = {
-                IdSanPham: req.body.txtId,
-                IdNguoiDung: req.body.txtName,
-                TenNguoiMua: user[0].HoVaTen,
-                Gia: gia,
-                NgayDauGia: moment().format("YYYY-MM-DD hh:mm:ss")
-            }
+                entity = {
+                    IdSanPham: req.body.txtId,
+                    IdNguoiDung: req.body.txtName,
+                    TenNguoiMua: user[0].HoVaTen,
+                    Gia: gia,
+                    NgayDauGia: moment().format("YYYY-MM-DD hh:mm:ss")
+                }
             await aution.add(entity);
 
-            const maxaution=await aution.maxaution(+req.body.txtId);
-            if(maxaution[0]!=null){
-            maxaution[0].SoLuotRaGia=maxaution[0].SoLuotRaGia+1;
-            const l= await productModel.patch(maxaution[0]);
-            entity2={
-                GiaHienTai:maxaution[0].GiaHienTai,
-                IdSanPham:req.body.txtId
+            const maxaution = await aution.maxaution(+req.body.txtId);
+            if (maxaution[0] != null) {
+                maxaution[0].SoLuotRaGia = maxaution[0].SoLuotRaGia + 1;
+                const l = await productModel.patch(maxaution[0]);
+                entity2 = {
+                    GiaHienTai: maxaution[0].GiaHienTai,
+                    IdSanPham: req.body.txtId
+                }
+                await cart.patch(entity2);
             }
-            await cart.patch(entity2);
-        }
-            
+
 
             confirm = 1;
             let mail = await transporter.sendMail({
@@ -269,25 +269,25 @@ router.post("/deal", async (req, res) => {
     }
     else if (allow[0].Quyen === 1) {
         let gia = +req.body.txtSoBuocGia * sp[0].BuocGia + sp[0].GiaHienTai,
-        entity = {
-            IdSanPham: req.body.txtId,
-            IdNguoiDung: req.body.txtName,
-            TenNguoiMua: user[0].HoVaTen,
-            Gia: gia,
-            NgayDauGia: moment().format("YYYY-MM-DD hh:mm:ss")
-        }
+            entity = {
+                IdSanPham: req.body.txtId,
+                IdNguoiDung: req.body.txtName,
+                TenNguoiMua: user[0].HoVaTen,
+                Gia: gia,
+                NgayDauGia: moment().format("YYYY-MM-DD hh:mm:ss")
+            }
         await aution.add(entity);
-        const maxaution=await aution.maxaution(+req.body.txtId);
-            if(maxaution[0]!=null){
-            maxaution[0].SoLuotRaGia=maxaution[0].SoLuotRaGia+1;
-            const l= await productModel.patch(maxaution[0]);
-            entity2={
-                GiaHienTai:maxaution[0].GiaHienTai,
-                IdSanPham:req.body.txtId
+        const maxaution = await aution.maxaution(+req.body.txtId);
+        if (maxaution[0] != null) {
+            maxaution[0].SoLuotRaGia = maxaution[0].SoLuotRaGia + 1;
+            const l = await productModel.patch(maxaution[0]);
+            entity2 = {
+                GiaHienTai: maxaution[0].GiaHienTai,
+                IdSanPham: req.body.txtId
             }
             await cart.patch(entity2);
         }
-            
+
         confirm = 1;
         let mail = await transporter.sendMail({
             from: "webapponlineauction@gmail.com",
@@ -298,7 +298,7 @@ router.post("/deal", async (req, res) => {
         });
     }
 
-    
+
 
 
     const url = req.query.retUrl;
@@ -310,8 +310,8 @@ router.post("/deal", async (req, res) => {
 })
 
 
-router.get("/productAutioning",restrict,async(req,res)=>{
-    if(req.session.isAuthenticated==false){
+router.get("/productAutioning", restrict, async (req, res) => {
+    if (req.session.isAuthenticated == false) {
         return res.redirect('/account/login?retUrl=/account/productAutioning');
     }
 
@@ -321,13 +321,13 @@ router.get("/productAutioning",restrict,async(req,res)=>{
     if (page < 1) page = 1;
     const offset = (page - 1) * config.paginate.limit;
 
-    let [total,rows] = await Promise.all([
-         aution.countAutionByBidder(bidderId),
-         aution.pageAutionByBidder(bidderId, offset)
+    let [total, rows] = await Promise.all([
+        aution.countAutionByBidder(bidderId),
+        aution.pageAutionByBidder(bidderId, offset)
     ]);
-    
-    
-    
+
+
+
 
     let nPages = Math.floor(total / limit);
     if (total % limit > 0) nPages++;
@@ -335,24 +335,24 @@ router.get("/productAutioning",restrict,async(req,res)=>{
     let page_numbers = [];
     for (i = 1; i <= nPages; i++) {
         page_numbers.push({
-        value: i,
-        isCurrentPage: i === +page
+            value: i,
+            isCurrentPage: i === +page
         })
     }
-    for (c of rows){
+    for (c of rows) {
         c.NgayHetHan = moment(rows[0].NgayHetHan, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
-        if(c.IdNguoiThang !=bidderId)
-        c.config=0;
+        if (c.IdNguoiThang != bidderId)
+            c.config = 0;
         else
-        c.config=1
+            c.config = 1
 
 
 
 
     }
-   
-    res.render("vwAccount/autioning",{
-        product:rows,
+
+    res.render("vwAccount/autioning", {
+        product: rows,
         num_of_page: nPages,
         isPage: +page,
         empty: rows.length === 0,
@@ -364,8 +364,8 @@ router.get("/productAutioning",restrict,async(req,res)=>{
 })
 
 
-router.get("/productAuctioned",restrict,async(req,res)=>{
-    if(req.session.isAuthenticated==false){
+router.get("/productAuctioned", restrict, async (req, res) => {
+    if (req.session.isAuthenticated == false) {
         return res.redirect('/account/login?retUrl=/account/productAutioned');
     }
 
@@ -375,13 +375,13 @@ router.get("/productAuctioned",restrict,async(req,res)=>{
     if (page < 1) page = 1;
     const offset = (page - 1) * config.paginate.limit;
 
-    let [total,rows] = await Promise.all([
-         productModel.countAuctionedByBidder(bidderId),
-         productModel.pageAuctionedByBidder(bidderId, offset)
+    let [total, rows] = await Promise.all([
+        productModel.countAuctionedByBidder(bidderId),
+        productModel.pageAuctionedByBidder(bidderId, offset)
     ]);
-    
-    
-    
+
+
+
 
     let nPages = Math.floor(total / limit);
     if (total % limit > 0) nPages++;
@@ -389,12 +389,12 @@ router.get("/productAuctioned",restrict,async(req,res)=>{
     let page_numbers = [];
     for (i = 1; i <= nPages; i++) {
         page_numbers.push({
-        value: i,
-        isCurrentPage: i === +page
+            value: i,
+            isCurrentPage: i === +page
         })
     }
-    res.render("vwAccount/autioned",{
-        product:rows,
+    res.render("vwAccount/autioned", {
+        product: rows,
         num_of_page: nPages,
         isPage: +page,
         empty: rows.length === 0,
@@ -413,18 +413,18 @@ router.get("/productAuctioned",restrict,async(req,res)=>{
 
 
 router.get("/uptoseller", async (req, res) => {
-    if(req.session.isAuthenticated==false){
+    if (req.session.isAuthenticated == false) {
         return res.redirect('/account/login');
     }
-    entity={
-        IdNguoiDung:res.locals.authUser.IdNguoiDung
+    entity = {
+        IdNguoiDung: res.locals.authUser.IdNguoiDung
 
     }
     uptoseller.add(entity);
-    const user=await userModel.single(+res.locals.authUser.IdNguoiDung);
-    confirm=3;
-    if(+user[0].LoaiNguoiDung!=1)
-        confirm=-1
+    const user = await userModel.single(+res.locals.authUser.IdNguoiDung);
+    confirm = 3;
+    if (+user[0].LoaiNguoiDung != 1)
+        confirm = -1
     res.render('vwConfirm/confirm', {
         isConfirm: confirm,
         url: '/'
@@ -434,7 +434,7 @@ router.get("/uptoseller", async (req, res) => {
 
 
 router.get("/delwishlist/:id", async (req, res) => {
-    cart.delProduct(+req.params.id,+res.locals.authUser.IdNguoiDung);
+    cart.delProduct(+req.params.id, +res.locals.authUser.IdNguoiDung);
     res.redirect('/account/wishlist');
 
 })
