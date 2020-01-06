@@ -584,11 +584,18 @@ router.get("/uptoseller", async (req, res) => {
     });
 })
 
+router.get("/coin",restrict, async (req, res) => {
+    user =await userModel.single(+res.locals.authUser.IdNguoiDung);
+    
+    let percent=Math.floor(user[0].DiemCong*100/(user[0].DiemCong+user[0].DiemTru));
 
-
-router.get("/delwishlist/:id", async (req, res) => {
-    cart.delProduct(+req.params.id, +res.locals.authUser.IdNguoiDung);
-    res.redirect('/account/wishlist');
-
+    res.render('vwAccount/coin',{
+    User:user[0],
+    percent:percent
+    });
 })
+
+
+
+
 module.exports = router;
