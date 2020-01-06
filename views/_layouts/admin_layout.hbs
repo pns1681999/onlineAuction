@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- owl carousel CSS -->
+    <link rel="stylesheet" href="/css/owl.carousel.min.css">
+    <!-- Slick Carousel CSS -->
+    <link rel="stylesheet" href="/css/slick.css">    
+    <!-- Main Style CSS -->
+    <link rel="stylesheet" href="/style.css">
     <!-- Bootstrap 3.3.4 -->
     <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <!-- FontAwesome 4.3.0 -->
@@ -40,7 +46,11 @@
 
       <header class="main-header">
         <!-- Header Navbar: style can be found in header.less -->
+        <a href="/admin/home" class="logo">
+          <span class="logo-lg"><b>HOME</b></span>
+        </a>
         <nav class="navbar navbar-static-top" role="navigation">
+          
           <!-- Sidebar toggle button-->
           <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
@@ -97,7 +107,6 @@
               </a>
               <ul class="treeview-menu">
                 <li><a href="/admin/product/list"><i class="fa fa-circle-o"></i> Xem danh sách sản phẩm</a></li>
-                <li><a href="/admin/product/add"><i class="fa fa-circle-o"></i>Thêm sản phẩm</a></li>
               </ul>
             </li>
             <li class="active treeview">
@@ -328,12 +337,19 @@
     <script src="/dist/js/demo.js" type="text/javascript"></script>
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
-    <script>
-        $('#NgaySinh').datetimepicker({
-            format: 'd/m/Y',
-            timepicker: false,
-            mask: true,
-        });
-    </script>
+    <!-- Meanmenu js -->
+    <script src="/js/jquery.meanmenu.min.js"></script>
+    <!-- Slick Carousel js -->
+    <script src="/js/slick.min.js"></script>
+    <!-- Owl Carousel-2 js -->
+    <script src="/js/owl.carousel.min.js"></script>
+    <!-- Countdown -->
+    <script src="/js/jquery.countdown.min.js"></script>
+    <!-- Counterup -->
+    <script src="/js/jquery.counterup.min.js"></script>
+     <!-- ScrollUp js -->
+    <script src="/js/scrollUp.min.js"></script>
+    <!-- Main/Activator js -->
+    <script src="/js/main.js"></script>
   </body>
 </html>
