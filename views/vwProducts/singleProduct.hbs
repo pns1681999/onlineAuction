@@ -72,12 +72,6 @@
                 <div class="product-details-view-content pt-60">
                     <div class="product-info">
                         <h2>{{product.TenSanPham}}</h2>
-                        <form method="POST">
-                        <div class="product-additional-info ">
-                                <button class="add-to-cart quantity" type="submit" style="background-color: crimson;color:rgb(15, 14, 14); font-weight: bold; "
-                                    formaction="/account/buynow/id={{product.IdSanPham}}/gia={{product.GiaMuaNgay}}?retUrl=/products/{{product.IdSanPham}}">Mua ngay với {{ format product.GiaMuaNgay}}</button>    
-                        </div>
-                        </form>
                         <div class="rating-box pt-20">
                             <ul class="rating rating-with-review-item">
                                 <h5 class="manufacturer">
@@ -111,13 +105,13 @@
                                 <li><i class="fa fa-thumbs-up"></i> {{NguoiThang.DiemCong}}</li>
                                 <li><i class="fa fa-thumbs-down"></i>{{NguoiThang.DiemTru}}</li>
                                 {{#if (eq NguoiBan.IdNguoiDung authUser.IdNguoiDung)}}
-                                     <form
+                                <form
                                     action="/seller/block/bidder={{NguoiThang.IdNguoiDung}}/product={{product.IdSanPham}}"
                                     method="POST" id="frmblock"></form>
                                 <li><a href="javascript: $('#frmblock').submit();"><i
                                             class="fa fa-remove text-danger"></i> <span class="text-danger"><b> Cấm ra
                                                 giá</b></span></a></li>
-                               
+
                                 {{/if}}
                             </ul>
 
@@ -143,7 +137,7 @@
                                 <input type="number" name="txtSoBuocGia" id="fillmoney" value="1" min="1">
                                 <button class="add-to-cart" type="submit"
                                     formaction="/account/deal?retUrl=/products/{{product.IdSanPham}}">Ra giá</button>
-                                 {{else}}
+                                {{else}}
                                 <input type="number" name="txtSoBuocGia" id="fillmoney" value="1" min="1">
                                 <button class="add-to-cart"
                                     formaction="/account/login?retUrl=/products/{{product.IdSanPham}}">Ra giá</button>
@@ -151,7 +145,7 @@
 
                                 {{/if }}
                                 {{/if}}
-                                
+
                             </form>
                         </div>
                         <div class="product-additional-info pt-25">
@@ -161,8 +155,8 @@
                                 <input id="txtId" name="txtId" style="display:none;"
                                     value={{product.IdSanPham}}></input>
                                 <button class="add-to-cart" style="border:none; background:0"
-                                    formaction="/account/cart?retUrl=/products/{{product.IdSanPham}}" type="submit"> <a href=""><i
-                                        class="fa fa-heart-o"> Thêm vào wishlist </a></i></button>
+                                    formaction="/account/cart?retUrl=/products/{{product.IdSanPham}}" type="submit"> <a
+                                        href=""><i class="fa fa-heart-o"> Thêm vào wishlist </a></i></button>
                             </form>
                         </div>
                         <div class="block-reassurance">
@@ -335,11 +329,24 @@
 
                                     <div class="add-actions">
                                         <ul class="add-actions-link">
-                                            <li class="add-cart active"><a href="#"><span
-                                                        class="fa fa-shopping-cart"></span> {{format GiaMuaNgay}}
-                                                    VND</a></li>
-                                            <li><button style="border:none; background:0" formaction="/account/cart"
-                                                    type="submit"><i class="fa fa-heart-o"></i></button></li>
+                                            <form method="POST">
+                                                <input id="txtName" name="txtName" style="display:none;"
+                                                    value={{../authUser.IdNguoiDung}}></input>
+                                                <input id="txtId" name="txtId" style="display:none;"
+                                                    value={{IdSanPham}}></input>
+                                                {{#if GiaMuaNgay}}
+                                                <li class="add-cart active"><a href="#"><span
+                                                            class="fa fa-shopping-cart"></span>
+                                                        {{format GiaMuaNgay}}
+                                                        VND</a></li>
+                                                <li><button style="border:none; background:0" formaction="/account/cart?retUrl=/products/{{../product.IdSanPham}}"
+                                                        type="submit"><i class="fa fa-heart-o"></i></button></li>
+                                                {{else}}
+                                                <li class="w-100"><button style="border:none; background:0"
+                                                        formaction="/account/cart" type="submit"><i
+                                                            class="fa fa-heart-o"></i></button></li>
+                                                {{/if}}
+                                            </form>
 
                                         </ul>
                                     </div>

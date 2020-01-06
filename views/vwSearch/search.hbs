@@ -14,7 +14,7 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
-                
+
                 {{#if this.empty}}
                 <div class="card-body">
                     <p class="card-text">
@@ -38,9 +38,9 @@
                                                         alt="Li's Product Image">
                                                 </a>
                                                 {{#if isNew}}
-                                                    <span class="sticker">New</span>
+                                                <span class="sticker">New</span>
                                                 {{/if}}
-                                                
+
                                             </div>
                                             <div class="product_desc">
                                                 <div class="product_desc_info">
@@ -51,8 +51,11 @@
                                                         </h5>
                                                         <div class="rating-box">
                                                             <ul class="rating">
-                                                                <li><i class="fa fa-thumbs-up"></i> {{NguoiThang.DiemCong}}</li>
-                                                                <li><i class="fa fa-thumbs-down"></i>{{NguoiThang.DiemTru}}</li>
+                                                                <li><i class="fa fa-thumbs-up"></i>
+                                                                    {{NguoiThang.DiemCong}}</li>
+                                                                <li><i
+                                                                        class="fa fa-thumbs-down"></i>{{NguoiThang.DiemTru}}
+                                                                </li>
                                                             </ul>
                                                         </div>
                                                     </div>
@@ -63,7 +66,8 @@
                                                     <div class="price-box">
                                                         <span class="new-price"><span class="fa fa-gavel"></span>
                                                             {{SoLuotRaGia}}</span>
-                                                        <span class="new-price new-price-2">{{format GiaHienTai}} VND</span>
+                                                        <span class="new-price new-price-2">{{format GiaHienTai}}
+                                                            VND</span>
                                                     </div>
                                                     <div class="countersection">
                                                         <span class="end-date">expired {{ThoiHan}}</span>
@@ -72,11 +76,25 @@
 
                                                 <div class="add-actions">
                                                     <ul class="add-actions-link">
-                                                        <li class="add-cart active"><a href="#"><span
-                                                                    class="fa fa-shopping-cart"></span> {{format GiaMuaNgay}}
-                                                                VND</a></li>
-                                                        <li ><button style="border:none; background:0"  formaction="/account/cart" type="submit"><i
-                                                            class="fa fa-heart-o"></i></button></li>
+                                                        <form method="POST">
+                                                            <input id="txtName" name="txtName" style="display:none;"
+                                                                value={{../authUser.IdNguoiDung}}></input>
+                                                            <input id="txtId" name="txtId" style="display:none;"
+                                                                value={{IdSanPham}}></input>
+                                                            {{#if GiaMuaNgay}}
+                                                            <li class="add-cart active"><a href="#"><span
+                                                                        class="fa fa-shopping-cart"></span>
+                                                                    {{format GiaMuaNgay}}
+                                                                    VND</a></li>
+                                                            <li><button style="border:none; background:0"
+                                                                    formaction="/account/cart" type="submit"><i
+                                                                        class="fa fa-heart-o"></i></button></li>
+                                                            {{else}}
+                                                            <li class="w-100"><button style="border:none; background:0"
+                                                                    formaction="/account/cart" type="submit"><i
+                                                                        class="fa fa-heart-o"></i></button></li>
+                                                            {{/if}}
+                                                        </form>
                                                         {{!-- <li><a href="#" title="quick view" class="quick-view-btn"
                                                                 data-toggle="modal" data-target="#exampleModalCenter"><i
                                                                     class="fa fa-eye"></i></a></li> --}}
@@ -101,7 +119,7 @@
                                                         Previous</a>
                                                 </li>
                                                 {{/if}}
-                                                
+
                                                 {{#each this.page_numbers}}
                                                 {{#if isCurrentPage}}
                                                 <li class="active"><a href="javascript:;">{{value}}</a></li>
@@ -116,7 +134,7 @@
                                                             class="fa fa-chevron-right"></i></a>
                                                 </li>
                                                 {{/if}}
-                                                
+
                                             </ul>
                                         </div>
                                     </div>
