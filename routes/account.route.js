@@ -364,6 +364,54 @@ router.get("/productAutioning",restrict,async(req,res)=>{
 })
 
 
+router.get("/productAuctioned",restrict,async(req,res)=>{
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/account/productAutioned');
+    }
+
+    const bidderId = res.locals.authUser.IdNguoiDung;
+    const limit = config.paginate.limit;
+    let page = req.query.page || 1;
+    if (page < 1) page = 1;
+    const offset = (page - 1) * config.paginate.limit;
+
+    let [total,rows] = await Promise.all([
+         productModel.countAuctionedByBidder(bidderId),
+         productModel.pageAuctionedByBidder(bidderId, offset)
+    ]);
+    
+    
+    
+
+    let nPages = Math.floor(total / limit);
+    if (total % limit > 0) nPages++;
+    if (page > nPages) page = nPages;
+    let page_numbers = [];
+    for (i = 1; i <= nPages; i++) {
+        page_numbers.push({
+        value: i,
+        isCurrentPage: i === +page
+        })
+    }
+    res.render("vwAccount/autioned",{
+        product:rows,
+        num_of_page: nPages,
+        isPage: +page,
+        empty: rows.length === 0,
+        page_numbers,
+        prev_value: +page - 1,
+        next_value: +page + 1,
+    });
+
+})
+
+
+
+
+
+
+
+
 router.get("/uptoseller", async (req, res) => {
     if(req.session.isAuthenticated==false){
         return res.redirect('/account/login');

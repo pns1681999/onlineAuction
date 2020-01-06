@@ -6,14 +6,13 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-12">
-                             {{#if this.empty}}
+                            {{#if this.empty}}
                             <div class="card-body">
                             <p class="card-text">
                              Không có dữ liệu.
                             </p>
                             </div>
                             {{else}}
-
                             <form action="#">
                                 <div class="table-content table-responsive">
                                     <table class="table">
@@ -21,30 +20,16 @@
                                             <tr>
                                                 <th class="cart-product-id">ProducId</th>
                                                 <th class="cart-product-name">ProductName</th>
-                                                <th> ngayhethan</th>
-                                                <th class="li-product-add-cart">gia hien tai</th>
+                                                <th class="li-product-add-cart">gia</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {{#each product}}
-                                            
-                                                {{#if config }}
-                                                <tr class="table-danger">
-                                                <td>{{IdSanPham}}</td>
-                                                <td>{{TenSanPham}}</td>
-                                                <td>{{NgayHetHan}}</td>
-                                                <td>{{format GiaHienTai}}</td>
-                                                </tr>
-                                                {{else}}
                                                 <tr >
                                                 <td>{{IdSanPham}}</td>
                                                 <td>{{TenSanPham}}</td>
-                                                <td>{{NgayHetHan}}</td>
                                                 <td>{{format GiaHienTai}}</td>
                                                 </tr>
-                                                {{/if}}
-                                                
-                                            
                                             {{/each}}
                                         </tbody>
                                     </table>
