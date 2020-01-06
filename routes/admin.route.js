@@ -7,6 +7,8 @@ const productModel = require('../models/product.model');
 const cart=require("../models/cart.model");
 const config = require('../config/default.json');
 const router = express.Router();
+const aution=require('../models/aution.model');
+const mask=require('mask-text');
 
 ///////////////////HOME
 router.get('/home',(req,res)=>{
@@ -40,14 +42,6 @@ router.get('/profile',async(req,res)=>{
         nguoidung: rows[0],
         layout: 'admin_layout.hbs'
     });
-    // const profile=await userModel.singleByUsername(req.session.authUser.TenDangNhap);
-    // delete profile.MatKhau;
-    
-    // profile.NgaySinh = moment(profile.NgaySinh, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
-    // res.render('vwAccount/profile',{
-    //     infor:profile
-    // });
-
 })
 
 ///////////////////CATEGORY
@@ -401,6 +395,209 @@ router.get('/user/delete/:id', async (req, res) => {
     
     res.render('vwAdmin/user/list',  {
         nguoidung: rows,
+        empty: rows.length === 0,
+        layout: 'admin_layout.hbs'
+    });
+})
+
+
+///////////////PRODUCT
+router.get('/product/list', async (req, res) =>{
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/product/list');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+    
+    const rows = await productModel.all();
+    
+    res.render('vwAdmin/product/list',  {
+        sanpham: rows,
+        empty: rows.length === 0,
+        layout: 'admin_layout.hbs'
+      });
+})
+
+router.get('/product/detail/:id', async(req,res)=>{
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/home');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+    
+    let rows = await productModel.single(req.params.id);
+    
+    let [rows1, nguoiban, nguoithang] = await Promise.all([
+        productModel.allByCat(rows[0].LoaiSanPham),
+        userModel.single(rows[0].IdNguoiBan),
+        userModel.single(rows[0].IdNguoiThang)
+    ]);
+
+    for (let i = rows1.length - 1; i >= 0; i--) {
+        if (rows1[i].IdSanPham === rows[0].IdSanPham) rows1.splice(i, 1);
+    }
+    for (let c of rows1) {
+        let nguoithang = await userModel.single(c.IdNguoiThang);
+        
+        c.NguoiThang = nguoithang[0];
+        c.NgayDang = moment(c.NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
+        c.ThoiHan = moment(c.NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
+    }
+    if(nguoithang[0]!=null)
+    nguoithang[0].HoVaTen=mask(nguoithang[0].HoVaTen,0,nguoithang[0].HoVaTen.length-5,'*');
+
+    rows[0].NgayDang = moment(rows[0].NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
+    rows[0].ThoiHan = moment(rows[0].NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
+
+    danhmuc = await categoryModel.single(rows[0].LoaiSanPham);
+    res.render('vwAdmin/product/detail', {
+        product: rows[0],
+        LoaiSanPham: danhmuc[0],
+        NguoiBan: nguoiban[0],
+        NguoiThang: nguoithang[0],
+        layout: 'admin_layout.hbs'
+    });
+})
+
+router.get('/product/bidder/:id', async(req,res)=>{
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/home');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+
+    let bidders = await aution.single(req.params.id);
+
+    res.render('vwAdmin/product/bidder', {
+        bidder: bidders,
+        layout: 'admin_layout.hbs'
+    });
+})
+
+router.get('/product/update/:id', async (req, res) => {
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/home');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+
+    let rows = await productModel.single(req.params.id);
+
+    let [rows1, nguoiban, nguoithang] = await Promise.all([
+        productModel.allByCat(rows[0].LoaiSanPham),
+        userModel.single(rows[0].IdNguoiBan),
+        userModel.single(rows[0].IdNguoiThang)
+    ]);
+
+    for (let i = rows1.length - 1; i >= 0; i--) {
+        if (rows1[i].IdSanPham === rows[0].IdSanPham) rows1.splice(i, 1);
+    }
+    for (let c of rows1) {
+        let nguoithang = await userModel.single(c.IdNguoiThang);
+        
+        c.NguoiThang = nguoithang[0];
+        c.NgayDang = moment(c.NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
+        c.ThoiHan = moment(c.NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
+    }
+    if(nguoithang[0]!=null)
+    nguoithang[0].HoVaTen=mask(nguoithang[0].HoVaTen,0,nguoithang[0].HoVaTen.length-5,'*');
+
+    rows[0].NgayDang = moment(rows[0].NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
+    rows[0].ThoiHan = moment(rows[0].NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
+
+    danhmuc = await categoryModel.all();
+    res.render('vwAdmin/product/update', {
+        product: rows[0],
+        LoaiSanPham: danhmuc,
+        NguoiBan: nguoiban[0],
+        NguoiThang: nguoithang[0],
+        layout: 'admin_layout.hbs'
+    });
+})
+
+router.post('/product/update/:id', async (req, res) => {
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/home');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+
+    const dob_1 = moment(req.body.NgayDang, 'MM/DD/YYYY').format('YYYY-MM-DD');
+    const dob_2 = moment(req.body.NgayHetHan, 'MM/DD/YYYY').format('YYYY-MM-DD');
+
+    let entity = {
+        IdSanPham: req.body.IdSanPham,
+        TenSanPham: req.body.TenSanPham,
+        LoaiSanPham: req.body.LoaiSanPham,
+        ChiTiet: req.body.ChiTiet,
+        GiaKhoiDiem: req.body.GiaKhoiDiem,
+        NgayDang: dob_1,
+        NgayHetHan: dob_2,
+        GiaBanToiThieu: req.body.GiaBanToiThieu,
+        GiaHienTai: req.body.GiaHienTai,
+        GiaMuaNgay: req.body.GiaMuaNgay,
+        SoLuotRaGia: req.body.SoLuotRaGia,
+        BuocGia: req.body.BuocGia,
+        TinhTrang: req.body.TinhTrang,
+        DanhGia: req.body.DanhGia,
+    }
+    
+    const result = await productModel.patch(entity);
+
+    let rows = await productModel.single(req.params.id);
+    
+    let [rows1, nguoiban, nguoithang] = await Promise.all([
+        productModel.allByCat(rows[0].LoaiSanPham),
+        userModel.single(rows[0].IdNguoiBan),
+        userModel.single(rows[0].IdNguoiThang)
+    ]);
+
+    for (let i = rows1.length - 1; i >= 0; i--) {
+        if (rows1[i].IdSanPham === rows[0].IdSanPham) rows1.splice(i, 1);
+    }
+    for (let c of rows1) {
+        let nguoithang = await userModel.single(c.IdNguoiThang);
+        
+        c.NguoiThang = nguoithang[0];
+        c.NgayDang = moment(c.NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
+        c.ThoiHan = moment(c.NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
+    }
+    if(nguoithang[0]!=null)
+    nguoithang[0].HoVaTen=mask(nguoithang[0].HoVaTen,0,nguoithang[0].HoVaTen.length-5,'*');
+
+    rows[0].NgayDang = moment(rows[0].NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
+    rows[0].ThoiHan = moment(rows[0].NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
+
+    danhmuc = await categoryModel.single(rows[0].LoaiSanPham
+        );
+    res.render('vwAdmin/product/detail', {
+        product: rows[0],
+        LoaiSanPham: danhmuc[0],
+        NguoiBan: nguoiban[0],
+        NguoiThang: nguoithang[0],
+        layout: 'admin_layout.hbs'
+    });
+})
+
+router.get('/product/delete/:id', async (req, res) => {
+    if(req.session.isAuthenticated==false){
+        return res.redirect('/account/login?retUrl=/admin/home');
+    }
+    
+    if (req.session.authUser.LoaiNguoiDung!=0)
+        return res.render('vwError/permission');
+        
+    const result = await productModel.del(req.params.id);
+
+    const rows = await productModel.all();
+    
+    res.render('vwAdmin/product/list',  {
+        sanpham: rows,
         empty: rows.length === 0,
         layout: 'admin_layout.hbs'
     });
