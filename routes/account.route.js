@@ -201,6 +201,7 @@ router.get("/wishlist", restrict, async (req, res) => {
 })
 
 router.post("/cart",restrict, async (req, res) => {
+    console.log(req.body.txtId);
     let entity = await productModel.cartinf(+req.body.txtId);
     entity[0].IdNguoiDung=res.locals.authUser.IdNguoiDung;
     console.log(entity);
@@ -351,7 +352,7 @@ router.post("/buynow/id=:id1/gia=:id2",restrict, async (req, res) => {
                 to: user[0].Email,
                 subject: "Thông báo", // Subject line
                 text: "Kết quả ra giá", // plain text body
-                html: "Bạn đã mua  <b>thành công</b> sản phẩm <b>" + sp[0].TenSanPham + "</b> với giá <b>" + gia + "</b>." // html body
+                html: "Bạn đã mua <b>thành công</b> sản phẩm <b>" + sp[0].TenSanPham + "</b> với giá <b>" + gia + "</b>." // html body
             });
 
 
