@@ -29,16 +29,16 @@
                                             {{#each product}}
                                             
                                                 {{#if config }}
-                                                <tr class="table-danger">
+                                                <tr class="table-success">
                                                 <td>{{IdSanPham}}</td>
                                                 <td><a href="/products/{{IdSanPham}}">{{TenSanPham}}</a></td>
                                                 <td>{{NgayHetHan}}</td>
                                                 <td>{{format GiaHienTai}}</td>
                                                 </tr>
                                                 {{else}}
-                                                <tr >
+                                                <tr class="table-danger">
                                                 <td>{{IdSanPham}}</td>
-                                                <td>{{TenSanPham}}</td>
+                                                <td><a href="/products/{{IdSanPham}}">{{TenSanPham}}</a></td>
                                                 <td>{{NgayHetHan}}</td>
                                                 <td>{{format GiaHienTai}}</td>
                                                 </tr>
