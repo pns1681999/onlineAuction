@@ -200,9 +200,11 @@ router.get("/wishlist",restrict,async(req,res)=>{
 
 })
 
-router.post("/cart", async (req, res) => {
-    let entity = await productModel.cartinf(+req.body.txtId, +req.body.txtName);
-    if (req.body.txtName != '')
+router.post("/cart",restrict, async (req, res) => {
+    let entity = await productModel.cartinf(+req.body.txtId);
+    entity[0].IdNguoiDung=res.locals.authUser.IdNguoiDung;
+    console.log(entity);
+    if (req.session.isAuthenticated!=false)
         cart.add(entity);
     const url = req.query.retUrl || '/';
     res.redirect(url);
@@ -288,6 +290,109 @@ router.post("/deal", async (req, res) => {
             await cart.patch(entity2);
         }
             
+        confirm = 1;
+        let mail = await transporter.sendMail({
+            from: "webapponlineauction@gmail.com",
+            to: user[0].Email,
+            subject: "Thông báo", // Subject line
+            text: "Kết quả ra giá", // plain text body
+            html: "Bạn được ra giá <b>thành công</b> sản phẩm <b>" + sp[0].TenSanPham + "</b> với giá <b>" + gia + "</b>." // html body
+        });
+    }
+
+    
+
+
+    const url = req.query.retUrl;
+
+    res.render('vwConfirm/confirm', {
+        isConfirm: confirm,
+        url: url
+    });
+})
+
+
+
+router.post("/buynow/id=:id1/gia=:id2",restrict, async (req, res) => {
+    const sp = await productModel.single(+req.params.id1);
+    const user = await userModel.single(+res.locals.authUser.IdNguoiDung);
+    const seller = await userModel.single(sp[0].IdNguoiBan);
+    const allow = await allowModel.single(seller[0].IdNguoiDung, sp[0].IdSanPham, user[0].IdNguoiDung);
+    let confirm = 0;
+    if (typeof (allow[0]) === 'undefined') {
+        if ((user[0].DiemCong * 100) / (user[0].DiemCong + user[0].DiemTru) >= 80) {
+            //cập nhật thẳng lên db
+            let gia = +req.params.id2,
+            entity = {
+                IdSanPham: req.params.id1,
+                IdNguoiDung: +res.locals.authUser.IdNguoiDung,
+                TenNguoiMua: user[0].HoVaTen,
+                Gia: gia,
+                NgayDauGia: moment().format("YYYY-MM-DD hh:mm:ss")
+            }
+            await aution.add(entity);
+
+            let maxaution=await aution.maxaution(+req.body.txtId);
+            if(maxaution[0]!=null){
+            maxaution[0].SoLuotRaGia=maxaution[0].SoLuotRaGia+1;
+            maxaution[0].TinhTrang=1;
+            maxaution[0].GiaHienTai=gia;
+            const l= await productModel.patch(maxaution[0]);
+            
+        }
+        console.log(maxaution);
+
+            
+
+            confirm = 1;
+            let mail = await transporter.sendMail({
+                from: "webapponlineauction@gmail.com",
+                to: user[0].Email,
+                subject: "Thông báo", // Subject line
+                text: "Kết quả ra giá", // plain text body
+                html: "Bạn đã mua  <b>thành công</b> sản phẩm <b>" + sp[0].TenSanPham + "</b> với giá <b>" + gia + "</b>." // html body
+            });
+
+
+        }
+        else {
+            entity = {
+                IdNguoiBan: seller[0].IdNguoiDung,
+                IdSanPham: sp[0].IdSanPham,
+                IdNguoiMua: user[0].IdNguoiDung,
+                Quyen: 2 //Chờ duyệt
+            }
+            allowModel.add(entity);
+            confirm = 2;
+        }
+
+    }
+    else if (allow[0].Quyen === 2) {
+        confirm = 2 //chờ duyệt
+    }
+    else if (allow[0].Quyen === 1) {
+        let gia = +req.params.id2;
+        entity = {
+            IdSanPham: +req.params.id1,
+                IdNguoiDung: +res.locals.authUser.IdNguoiDung,
+                TenNguoiMua: user[0].HoVaTen,
+                Gia: gia,
+                NgayDauGia: moment().format("YYYY-MM-DD hh:mm:ss")
+           
+        }
+        await aution.add(entity);
+        let maxaution=await aution.maxaution(+req.params.id1);
+            if(maxaution[0]!=null){
+            maxaution[0].SoLuotRaGia=maxaution[0].SoLuotRaGia+1;
+            maxaution[0].TinhTrang=1;
+            maxaution[0].GiaHienTai=gia;
+
+            const l= await productModel.patch(maxaution[0]);
+
+        }
+            
+        console.log(maxaution);
+
         confirm = 1;
         let mail = await transporter.sendMail({
             from: "webapponlineauction@gmail.com",
