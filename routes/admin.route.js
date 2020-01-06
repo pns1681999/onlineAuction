@@ -485,6 +485,9 @@ router.get('/product/detail/:id', async(req,res)=>{
         userModel.single(rows[0].IdNguoiBan),
         userModel.single(rows[0].IdNguoiThang)
     ]);
+    
+    let listImages = [];
+    for (let i = 0; i< rows[0].SoHinh; i++) listImages[i] = i+1; 
 
     for (let i = rows1.length - 1; i >= 0; i--) {
         if (rows1[i].IdSanPham === rows[0].IdSanPham) rows1.splice(i, 1);
@@ -510,6 +513,7 @@ router.get('/product/detail/:id', async(req,res)=>{
         LoaiSanPham: danhmuc[0],
         NguoiBan: nguoiban[0],
         NguoiThang: nguoithang[0],
+        listImages: listImages,
         layout: 'admin_layout.hbs'
     });
 })
@@ -546,6 +550,9 @@ router.get('/product/update/:id', async (req, res) => {
         userModel.single(rows[0].IdNguoiThang)
     ]);
 
+    let listImages = [];
+    for (let i = 0; i< rows[0].SoHinh; i++) listImages[i] = i+1;
+
     for (let i = rows1.length - 1; i >= 0; i--) {
         if (rows1[i].IdSanPham === rows[0].IdSanPham) rows1.splice(i, 1);
     }
@@ -570,6 +577,7 @@ router.get('/product/update/:id', async (req, res) => {
         LoaiSanPham: danhmuc,
         NguoiBan: nguoiban[0],
         NguoiThang: nguoithang[0],
+        listImages: listImages,
         layout: 'admin_layout.hbs'
     });
 })
