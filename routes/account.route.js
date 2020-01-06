@@ -379,9 +379,14 @@ router.get("/productAuctioned",restrict,async(req,res)=>{
          productModel.countAuctionedByBidder(bidderId),
          productModel.pageAuctionedByBidder(bidderId, offset)
     ]);
-    
-    
-    
+    console.log(rows);
+    console.log(total);
+    for (let c of rows) {
+        let nguoiban = await userModel.single(c.IdNguoiBan);
+        c.NguoiThang = nguoiban[0];
+        c.NgayDang = moment(c.NgayDang, "YYYY-MM-DD hh:mm:ss").format("DD/MM/YYYY");
+        c.ThoiHan = moment(c.NgayHetHan, "YYYY-MM-DD hh:mm:ss").fromNow();
+    }
 
     let nPages = Math.floor(total / limit);
     if (total % limit > 0) nPages++;
@@ -394,7 +399,8 @@ router.get("/productAuctioned",restrict,async(req,res)=>{
         })
     }
     res.render("vwAccount/autioned",{
-        product:rows,
+        isAuctioned: true,
+        products:rows,
         num_of_page: nPages,
         isPage: +page,
         empty: rows.length === 0,
@@ -407,6 +413,45 @@ router.get("/productAuctioned",restrict,async(req,res)=>{
 
 
 
+router.post('/voteLike/bidder=:id1/product=:id2', async(req, res) =>{
+    const idBidder=req.params.id1;
+    const idProduct=req.params.id2;
+    
+    console.log(idBidder, idProduct);
+    let rows1 = await userModel.single(idBidder);
+    let rows2 = await productModel.single(idProduct);
+    rows1[0].DiemCong = rows1[0].DiemCong + 1;
+    rows2[0].DanhGia = 1;
+    const result1 = await userModel.patch(rows1[0]);
+    const result2 = await productModel.patch(rows2[0]);
+    let check = await transporter.sendMail({
+        from:"webapponlineauction@gmail.com",
+        to: rows1[0].Email,
+        subject: "Thông báo Đánh giá✔", // Subject line
+        text: "Like", // plain text body
+        html: "Bạn được <b>Like</b> tại giao dịch sản phẩm " + rows2[0].TenSanPham // html body
+    });
+    res.redirect('/account/productAuctioned');
+})
+router.post('/voteDislike/bidder=:id1/product=:id2', async(req, res) =>{
+    const idBidder=req.params.id1;
+    const idProduct=req.params.id2;
+    let rows1 = await userModel.single(idBidder);
+    let rows2 = await productModel.single(idProduct);
+    rows1[0].DiemTru = rows1[0].DiemTru + 1;
+    rows2[0].DanhGia = 1;
+    const result1 = await userModel.patch(rows1[0]);
+    const result2 = await productModel.patch(rows2[0]);
+
+    let check = await transporter.sendMail({
+        from:"webapponlineauction@gmail.com",
+        to: rows1[0].Email,
+        subject: "Thông báo Đánh giá✔", // Subject line
+        text: "Dislike", // plain text body
+        html: "Bạn bị <b>Dislike</b> tại giao dịch sản phẩm " + rows2[0].TenSanPham // html body
+    });
+    res.redirect('/account/productAuctioned');
+})
 
 
 
