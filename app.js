@@ -50,6 +50,10 @@ app.get('/about', (req, res) => {
   res.render('about');
 })
 
+app.get('/terms_conditions', (req, res) => {
+  res.render('terms_conditions');
+})
+
 app.use((req, res, next) => {
   res.render('vwError/404');
   //res.send('You\'re lost');

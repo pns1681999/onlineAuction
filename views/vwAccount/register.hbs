@@ -34,6 +34,14 @@
                     <h3>Sign Up</h3>
                 </div>
                 <div class="card-body">
+                    {{#if err_message}}
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{err_message}}
+                    </div>
+                    {{/if}}
                     <form onsubmit="return isInvalidForm()" method="POST" id="frmRegister" class="frmRegister">
                         <div class="input-group form-group">
                             <div class="input-group-prepend">
@@ -85,7 +93,7 @@
                             <img id="checkConfirm" height="30" width="30" src="/images/required.png">
                         </div>
                         <div class="row align-items-center remember">
-                            <input type="checkbox" name="checkAgree" id="checkAgree"><a href="./terms_conditions.html">I
+                            <input type="checkbox" name="checkAgree" id="checkAgree"><a href="/terms_conditions">I
                                 agree with terms and conditions.</a>
                         </div>
 
@@ -127,6 +135,7 @@
             var temp_6 = 1;
             var temp_7 = 1;
             var temp_8 = 1;
+            var temp_9 = 1;
 
             //Kiểm tra Username khác rỗng
             if (data[1] === "")
@@ -150,8 +159,11 @@
             var j = data[0].lastIndexOf(".");
             var k = data[0].indexOf(" ");
 
+
+
             if (!((i !== -1) && (i !== 0) && (j !== -1) && (j > i + 1) && (j < data[0].length - 1) && (k == -1)))
                 temp_1 = 0;
+
 
             //Kiểm tra Password khác rỗng
             if (data[2] === "")
@@ -198,12 +210,12 @@
                     alert("Please agree with terms and conditions to sign up");
                 if (temp_6 === 0)
                     document.getElementById('pleaseCheck').innerHTML = "(*) Please check the captcha!";
-                 if (temp_7 === 0)
+                if (temp_7 === 0)
                     document.getElementById('checkName').src = "/images/required.png";
                 else
                     document.getElementById('checkName').src = "/images/true.png";
 
-                 if (temp_8 === 0)
+                if (temp_8 === 0)
                     document.getElementById('checkDob').src = "/images/required.png";
                 else
                     document.getElementById('checkDob').src = "/images/true.png";

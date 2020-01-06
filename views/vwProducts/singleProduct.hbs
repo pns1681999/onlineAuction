@@ -48,62 +48,21 @@
                 <!-- Product Details Left -->
                 <div class="product-details-left">
                     <div class="product-details-images slider-navigation-1">
+                        {{#each listImages}}
                         <div class="lg-image">
-                            <a class="popup-img venobox vbox-item" href="/images/product/{{product.IdSanPham}}/1.jpg"
-                                data-gall="myGallery">
-                                <img src="/images/product/{{product.IdSanPham}}/1.jpg" alt="product image">
+                            <a class="popup-img venobox vbox-item"
+                                href="/images/product/{{../product.IdSanPham}}/{{this}}.jpg" data-gall="myGallery">
+                                <img src="/images/product/{{../product.IdSanPham}}/{{this}}.jpg" alt="product image">
                             </a>
                         </div>
-                        <div class="lg-image">
-                            <a class="popup-img venobox vbox-item" href="/images/product/{{product.IdSanPham}}/1.jpg"
-                                data-gall="myGallery">
-                                <img src="/images/product/{{product.IdSanPham}}/1.jpg" alt="product image">
-                            </a>
-                        </div>
-                        <div class="lg-image">
-                            <a class="popup-img venobox vbox-item" href="/images/product/{{product.IdSanPham}}/1.jpg"
-                                data-gall="myGallery">
-                                <img src="/images/product/{{product.IdSanPham}}/1.jpg" alt="product image">
-                            </a>
-                        </div>
-                        <div class="lg-image">
-                            <a class="popup-img venobox vbox-item" href="/images/product/{{product.IdSanPham}}/1.jpg"
-                                data-gall="myGallery">
-                                <img src="/images/product/{{product.IdSanPham}}/1.jpg" alt="product image">
-                            </a>
-                        </div>
-                        <div class="lg-image">
-                            <a class="popup-img venobox vbox-item" href="/images/product/{{product.IdSanPham}}/1.jpg"
-                                data-gall="myGallery">
-                                <img src="/images/product/{{product.IdSanPham}}/1.jpg" alt="product image">
-                            </a>
-                        </div>
-                        <div class="lg-image">
-                            <a class="popup-img venobox vbox-item" href="/images/product/{{product.IdSanPham}}/1.jpg"
-                                data-gall="myGallery">
-                                <img src="/images/product/{{product.IdSanPham}}/1.jpg" alt="product image">
-                            </a>
-                        </div>
+                        {{/each}}
                     </div>
                     <div class="product-details-thumbs slider-thumbs-1">
-                        <div class="sm-image"><img src="/images/product/{{product.IdSanPham}}/1.jpg"
+                        {{#each listImages}}
+                        <div class="sm-image"><img src="/images/product/{{../product.IdSanPham}}/{{this}}.jpg"
                                 alt="product image thumb">
                         </div>
-                        <div class="sm-image"><img src="/images/product/{{product.IdSanPham}}/1.jpg"
-                                alt="product image thumb">
-                        </div>
-                        <div class="sm-image"><img src="/images/product/{{product.IdSanPham}}/1.jpg"
-                                alt="product image thumb">
-                        </div>
-                        <div class="sm-image"><img src="/images/product/{{product.IdSanPham}}/1.jpg"
-                                alt="product image thumb">
-                        </div>
-                        <div class="sm-image"><img src="/images/product/{{product.IdSanPham}}/1.jpg"
-                                alt="product image thumb">
-                        </div>
-                        <div class="sm-image"><img src="/images/product/{{product.IdSanPham}}/1.jpg"
-                                alt="product image thumb">
-                        </div>
+                        {{/each}}
                     </div>
                 </div>
                 <!--// Product Details Left -->
@@ -146,8 +105,12 @@
                                 <li><i class="fa fa-thumbs-up"></i> {{NguoiThang.DiemCong}}</li>
                                 <li><i class="fa fa-thumbs-down"></i>{{NguoiThang.DiemTru}}</li>
                                 {{#if (eq NguoiBan.IdNguoiDung authUser.IdNguoiDung)}}
-                                <form action="/seller/block/bidder={{NguoiThang.IdNguoiDung}}/product={{product.IdSanPham}}" method="POST" id="frmblock"></form>
-                                <li><a href="javascript: $('#frmblock').submit();"><i class="fa fa-remove text-danger"></i> <span class="text-danger"><b> Cấm ra giá</b></span></a></li>
+                                <form
+                                    action="/seller/block/bidder={{NguoiThang.IdNguoiDung}}/product={{product.IdSanPham}}"
+                                    method="POST" id="frmblock"></form>
+                                <li><a href="javascript: $('#frmblock').submit();"><i
+                                            class="fa fa-remove text-danger"></i> <span class="text-danger"><b> Cấm ra
+                                                giá</b></span></a></li>
                                 {{/if}}
                             </ul>
 
@@ -160,21 +123,23 @@
                                     <div class="price-box">
 
                                         <span>Bước giá: </span>
-                                        <span>{{format product.BuocGia}}</span>
+                                        <span> <b>{{format product.BuocGia}} </b> VND</span>
                                     </div class="price-box">
                                     <input id="txtId" name="txtId" style="display:none;"
                                         value={{product.IdSanPham}}></input>
                                     <input id="txtName" name="txtName" style="display:none;"
                                         value={{authUser.IdNguoiDung}}></input>
-                                    <input type="number" name="txtSoBuocGia" id="fillmoney" value="1" min="1">
+
                                 </div>
                                 {{#if (neq NguoiBan.IdNguoiDung authUser.IdNguoiDung)}}
                                 {{#if isAuthenticated}}
+                                <input type="number" name="txtSoBuocGia" id="fillmoney" value="1" min="1">
                                 <button class="add-to-cart" type="submit"
                                     formaction="/account/deal?retUrl=/products/{{product.IdSanPham}}">Ra giá</button>
                                 {{else}}
-
-                                <button class="add-to-cart"  formaction="/account/login?retUrl=/products/{{product.IdSanPham}}">Ra giá</button>
+                                <input type="number" name="txtSoBuocGia" id="fillmoney" value="1" min="1">
+                                <button class="add-to-cart"
+                                    formaction="/account/login?retUrl=/products/{{product.IdSanPham}}">Ra giá</button>
 
 
                                 {{/if }}
@@ -188,10 +153,9 @@
                                     value={{authUser.IdNguoiDung}}></input>
                                 <input id="txtId" name="txtId" style="display:none;"
                                     value={{product.IdSanPham}}></input>
-
                                 <button class="add-to-cart" style="border:none; background:0"
-                                    formaction="/account/cart?retUrl=/products/{{product.IdSanPham}}" type="submit"><i
-                                        class="fa fa-heart-o"></i></button>
+                                    formaction="/account/cart?retUrl=/products/{{product.IdSanPham}}" type="submit"> <a href=""><i
+                                        class="fa fa-heart-o"> Thêm vào wishlist </a></i></button>
                             </form>
                         </div>
                         <div class="block-reassurance">
@@ -333,7 +297,6 @@
                                     <a href="/products/{{IdSanPham}}">
                                         <img src="/images/product/{{IdSanPham}}/1.jpg" alt="Li's Product Image">
                                     </a>
-                                    <span class="sticker">Top {{sum @key 1}}</span>
                                 </div>
                                 <div class="product_desc">
                                     <div class="product_desc_info">
@@ -368,8 +331,8 @@
                                             <li class="add-cart active"><a href="#"><span
                                                         class="fa fa-shopping-cart"></span> {{format GiaMuaNgay}}
                                                     VND</a></li>
-                                            <li><a class="links-details" href="wishlist.html"><i
-                                                        class="fa fa-heart-o"></i></a></li>
+                                            <li><button style="border:none; background:0" formaction="/account/cart"
+                                                    type="submit"><i class="fa fa-heart-o"></i></button></li>
 
                                         </ul>
                                     </div>

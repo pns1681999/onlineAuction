@@ -24,7 +24,6 @@ router.get('/',  async(req, res) => {
     else {
         rowsSearch = await productModel.allInIdArray(listResult,offset);         
     }
-    console.log(rowsSearch);
     //res.render('vwSearch/search');
 
     
@@ -64,7 +63,6 @@ router.get('/',  async(req, res) => {
 })
 
 router.post('/', async (req, res) => {
-    console.log(req.body);
     let allrows;
     if (+req.body.idCat === 0) {
         allrows =  await productModel.all();
@@ -83,12 +81,10 @@ router.post('/', async (req, res) => {
     })
         
     let result = idx.search(req.body.keyword);
-    console.log(result);
     listResult = [];
     for (let c of result) {
         listResult.push(+c.ref)
     }
-    console.log(listResult);
     rowsSearch = [];
     const limit = config.paginate.limit;
     let page = req.query.page || 1;
@@ -114,7 +110,6 @@ router.post('/', async (req, res) => {
     for (let c of rowsSearch) {
         let nguoithang = await userModel.single(c.IdNguoiThang);
         let thoigianmoi = moment(current, "YYYY-MM-DD hh:mm:ss").subtract(10, 'minutes').format("YYYY-MM-DD hh:mm:ss");
-        console.log(thoigianmoi);
         if (moment(thoigianmoi).isBefore(c.NgayDang)) 
             c.isNew = true;
         else 

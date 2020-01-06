@@ -29,7 +29,6 @@ router.get('/:id/products', async(req, res) => {
     for (let c of rows) {
         let nguoithang = await userModel.single(c.IdNguoiThang);
         let thoigianmoi = moment(current, "YYYY-MM-DD hh:mm:ss").subtract(10, 'minutes').format("YYYY-MM-DD hh:mm:ss");
-        console.log(thoigianmoi);
         if (moment(thoigianmoi).isBefore(c.NgayDang)) 
             c.isNew = true;
         else 
