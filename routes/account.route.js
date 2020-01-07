@@ -128,24 +128,25 @@ router.get('/profile', restrict, async (req, res) => {
 router.post('/account/del', async (req, res) => {
 
 })
-router.post('/patch', async (req, res) => {
+router.post('/patch',restrict, async (req, res) => {
     const dob = moment(req.body.txtNgaySinh, 'DD/MM/YYYY').format('YYYY-MM-DD');
+    
+    
     const hash = bcrypt.hashSync(req.body.txtnewpass, 10);
-
-    const entity = {
+    
+    entity = {
         IdNguoiDung: req.body.txtIdNguoiDung,
         HoVaTen: req.body.txtHoVaTen,
         Email: req.body.txtEmail,
         NgaySinh: dob,
-        MatKhau: hash
-
-    }
-    if (req.body.txtnewpass === '') {
-        delete entity.MatKhau;
-    }
-    const user = await userModel.singleByEmail(req.body.txtEmail);
-
-    const rs = bcrypt.compareSync(req.body.txtpass, user.MatKhau);
+     }
+     if (req.body.txtnewpass.length!=0)
+     entity.MatKhau=hash;
+    console.log(entity);
+    
+    const user = await userModel.single(+res.locals.authUser.IdNguoiDung);
+     console.log(user);
+    const rs = bcrypt.compareSync(req.body.txtpass, user[0].MatKhau);
     if (rs === true) {
 
         const result = await userModel.patch(entity);
