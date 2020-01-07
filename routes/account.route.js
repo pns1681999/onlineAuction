@@ -151,6 +151,12 @@ router.post('/patch',restrict, async (req, res) => {
 
         const result = await userModel.patch(entity);
     }
+    else{
+        return res.render('vwAccount/profile',{
+            
+            err_message: 'wrong passwords'
+        })
+    }
     res.redirect('/account/profile');
 })
 

@@ -5,6 +5,14 @@
     <div class="card-body">
         
         <form method="POST">
+            {{#if err_message}}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          {{err_message}}
+        </div>
+        {{/if}}
         <div class="form-group">
             <label for="IdNguoiDung">#</label>
             <input type="text" class="form-control" id="txtIdNguoiDung"name="txtIdNguoiDung" readonly value="{{this.infor.IdNguoiDung}}" >
@@ -26,14 +34,7 @@
             <label for="txtnewpass">New Password</label>
             <input type="password" class="form-control" id="txtnewpass"name="txtnewpass"  >
         </div>
-        {{#if err_message}}
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          {{err_message}}
-        </div>
-        {{/if}}
+        
         <div class="form-group">
             <label for="txtnewpass">Password</label>
             <input type="password" class="form-control" id="txtpass"name="txtpass"  >
